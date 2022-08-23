@@ -23,6 +23,21 @@ class FilmViewEvent(ORJSONModel):
     view_second: int
 
 
+class LikeEvent(ORJSONModel):
+    user_id: str
+    movie_id: str
+    event_time: datetime
+    score: int
+
+
+class CommentEvent(ORJSONModel):
+    user_id: str
+    movie_id: str
+    event_time: datetime
+    comment_head: str
+    comment_body: str
+    score: int
+
 class EventMessage(ORJSONModel):
     key: str
     value: str
