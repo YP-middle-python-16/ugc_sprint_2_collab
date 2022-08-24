@@ -29,7 +29,7 @@ jobs:
       - name: flake8
         run: flake8
 
-      - name: mypy_api_ugc
+      - name: mypy_api_app
         run: mypy api_app
 
       - name: mypy_etl
