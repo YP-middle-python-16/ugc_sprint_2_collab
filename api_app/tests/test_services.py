@@ -1,6 +1,5 @@
 from unittest.mock import Mock
 
-import kafka
 import pytest
 from fastapi.params import Depends
 
