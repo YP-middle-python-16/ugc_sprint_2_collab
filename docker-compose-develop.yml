@@ -7,8 +7,10 @@ services:
     container_name: api
     ports:
       - "8000:8000"
-    entrypoint: [ "gunicorn", "src.main:app", "--workers", "4", "--worker-class",
-                  "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--reload" ]
+    command: bash -c 'pytest tests && 
+                      gunicorn src.main:app --workers 4 
+                      --worker-class uvicorn.workers.UvicornWorker 
+                      --bind 0.0.0.0:8000 --reload'
     env_file:
       - api_app/src/core/.env.dev
     depends_on:
