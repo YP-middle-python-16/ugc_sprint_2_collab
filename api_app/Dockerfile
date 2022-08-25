@@ -1,9 +1,13 @@
 FROM python:3.10-slim
 
-WORKDIR /home/app
+ENV APP_HOME=/home/app
+
+# set work directory
+WORKDIR $APP_HOME
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV PYTHONPATH "$APP_HOME/src"
 
 RUN pip install --upgrade pip
 
@@ -17,4 +21,5 @@ RUN pip install --user -r requirements.txt
 
 ENV PATH="/home/app/.local/bin:${PATH}"
 
-COPY --chown=app:app ./src .
+COPY --chown=app:app . .
+RUN ls
