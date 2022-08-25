@@ -31,6 +31,7 @@ def test_get_event_service_send_param_success():
 
 
 async def test_get_kafka_producer_empty_success():
+    db.kafka.kafka_producer = None
     kafka_producer = await get_kafka_producer()
 
     assert kafka_producer is None
