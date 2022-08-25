@@ -133,7 +133,7 @@ class BenchMark:
             for item in BATCH_SEQUENCE:
                 if BATCH_SEQUENCE[item]['use']:
                     mode = BATCH_SEQUENCE[item]['mode']
-                    #storage_name = BATCH_SEQUENCE[item]['storage']
+                    # storage_name = BATCH_SEQUENCE[item]['storage']
 
                     row_stat = self.benchmark_service(item, mode)
                     statistics.append(row_stat)
