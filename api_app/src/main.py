@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 from fastapi.logger import logger
 
-from api.v1 import events
+from api.v1 import events, likes, comments, bookmarks
 from core.config import settings
 from db import kafka
 from utils import backoff
@@ -33,6 +33,9 @@ async def shutdown():
 # Подключаем роутер к серверу, указав префикс /v1/events
 # Теги указываем для удобства навигации по документации
 app.include_router(events.router, prefix='/api/v1/event', tags=['Event'])
+app.include_router(comments.router, prefix='/api/v1/comments', tags=['Comment'])
+app.include_router(likes.router, prefix='/api/v1/likes', tags=['Likes'])
+app.include_router(bookmarks.router, prefix='/api/v1/bookmarks', tags=['Bookmarks'])
 
 if __name__ == '__main__':
     uvicorn.run(

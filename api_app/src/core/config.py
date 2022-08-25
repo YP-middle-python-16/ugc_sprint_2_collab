@@ -10,7 +10,7 @@ logging_config.dictConfig(LOGGING)
 
 class Settings(BaseSettings):
     # Название проекта. Используется в Swagger-документации
-    PROJECT_NAME: str = Field(env='PROJECT_NAME', default='statistics')
+    PROJECT_NAME: str = Field(env='PROJECT_NAME', default='UGC')
 
     # Корень проекта
     BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
