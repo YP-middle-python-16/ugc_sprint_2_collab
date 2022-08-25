@@ -27,13 +27,13 @@ jobs:
           pip install mypy flake8 black isort
 
       - name: black
-        run: black .
+        run: black --check .
 
       - name: isort
-        run: isort .
+        run: isort --check .
 
       - name: flake8
-        run: flake8
+        run: flake8 --config=setup.cfg
 
       - name: mypy_api_app
         run: mypy api_app
