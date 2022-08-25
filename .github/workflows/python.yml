@@ -36,13 +36,13 @@ jobs:
         run: mypy etl --ignore-missing-imports
 
       - name: send message to telegram
-          uses: appleboy/telegram-action@master
-          with:
-            to: ${{ secrets.TELEGRAM_TO }}
-            token: ${{ secrets.TELEGRAM_TOKEN }}
-            message: |
-              Python ${{ matrix.python-version }}
-              ${{ github.actor }} created commit:
-              Commit message: ${{ github.event.commits[0].message }}
-              Repository: ${{ github.repository }}
-              See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Python ${{ matrix.python-version }}
+            ${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
