@@ -30,7 +30,7 @@ jobs:
         run: flake8 --config=setup.cfg
 
       - name: mypy_api_app
-        run: mypy api_app
+        run: mypy api_app --ignore-missing-imports
 
       - name: mypy_etl
-        run: mypy etl
+        run: mypy etl --ignore-missing-imports
