@@ -23,10 +23,9 @@ jobs:
 
       - name: Create directories
         run: |
-          mkdir -p reports/api_app/wemake-python-styleguide/
-          mkdir -p reports/etl/wemake-python-styleguide/
-          mkdir -p reports/api_app/mypy/
-          mkdir -p reports/etl/mypy/
+          mkdir -p reports/wemake-python-styleguide/
+          mkdir -p reports/mypy/api_app/
+          mkdir -p reports/mypy/etl/
 
       - name: Install dependencies
         run: |
@@ -35,14 +34,14 @@ jobs:
 
       - name: flake8
         run: |
-          flake8 api_app/src --exit-zero --config=setup.cfg  --htmldir=reports/api_app/wemake-python-styleguide/
-          flake8 etl/src --exit-zero --config=setup.cfg  --htmldir=reports/etl/wemake-python-styleguide/
+          flake8 . --exit-zero --config=setup.cfg  --htmldir=reports/wemake-python-styleguide/
+
 
       - name: mypy_api_app
-        run: mypy api_app --ignore-missing-imports --html-report reports/api_app/mypy/
+        run: mypy api_app --ignore-missing-imports --html-report reports/mypy/api_app/
 
       - name: mypy_etl
-        run: mypy etl --ignore-missing-imports --html-report reports/etl/mypy/
+        run: mypy etl --ignore-missing-imports --html-report reports/mypy/etl/
 
       - name: Upload reports
         uses: actions/upload-artifact@v2

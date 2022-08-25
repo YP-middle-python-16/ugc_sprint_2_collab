@@ -9,6 +9,8 @@ from core.config import settings
 from db import kafka
 from utils import backoff
 
+BORDER_SLEEP_TIME = 20
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     docs_url='/api/v1/openapi',
@@ -18,7 +20,7 @@ app = FastAPI(
 
 
 @app.on_event('startup')
-@backoff(border_sleep_time=20)
+@backoff(border_sleep_time=BORDER_SLEEP_TIME)
 async def startup():
     kafka.kafka_producer = aiokafka.AIOKafkaProducer(bootstrap_servers=settings.KAFKA_BROKERS)
     await kafka.kafka_producer.start()
