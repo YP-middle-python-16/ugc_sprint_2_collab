@@ -44,6 +44,12 @@ jobs:
       - name: mypy_etl
         run: mypy etl --ignore-missing-imports --html-report reports/etl/mypy/
 
+      - name: Upload reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: reports
+          path: reports/
+
       - name: send message to telegram
         uses: appleboy/telegram-action@master
         with:
