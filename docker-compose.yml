@@ -7,7 +7,7 @@ services:
     container_name: api
     expose:
       - "8000"
-    entrypoint: [ "gunicorn", "main:app", "--workers", "4", "--worker-class",
+    entrypoint: [ "gunicorn", "src.main:app", "--workers", "4", "--worker-class",
                   "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--reload" ]
     env_file:
       - api_app/src/core/.env.dev
