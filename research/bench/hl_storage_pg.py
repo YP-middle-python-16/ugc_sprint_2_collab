@@ -15,8 +15,6 @@ class PostgresStorage(HiLoadStorage):
         self.insert_query = 'INSERT INTO content.movies_statistics (movie_id, user_id, event_time, view_run_time) ' \
                             'VALUES (%s, %s, %s, %s) '
 
-
-
     def insert(self, data=None):
         pass
 
@@ -25,8 +23,8 @@ class PostgresStorage(HiLoadStorage):
         saved_table = []
         for row in data:
             r = row.dict()
-            l = r.values()
-            t = tuple(l)
+            line = r.values()
+            t = tuple(line)
             saved_table.append(t)
         # saved_table = [row.dict() for row in data]
         execute_batch(cur, self.insert_query, saved_table, page_size=len(data))
