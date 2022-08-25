@@ -33,7 +33,7 @@ async def shutdown():
 @app.middleware('http')
 async def before_request(request: Request, call_next):
     request_id = request.headers.get('X-Request-Id')
-    if not request_id:
+    if settings.CHECK_HEADERS and not request_id:
         raise RuntimeError('request id is required')
     return await call_next(request)
 
