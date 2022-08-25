@@ -6,8 +6,8 @@ Event API> kafka> ETL> ClickHouse
 
 
 ## Использование
-Задать переменные окружения `API_HOST` и `API_PORT
-` 
+Задать переменные окружения `API_HOST` и `API_PORT` 
+
 ## Архитектура
 Сервис использует aiohttp  
 
