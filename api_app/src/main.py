@@ -1,8 +1,8 @@
 import aiokafka
 import uvicorn
-from fastapi import FastAPI
-from fastapi.responses import ORJSONResponse
+from fastapi import FastAPI, Request
 from fastapi.logger import logger
+from fastapi.responses import ORJSONResponse
 
 from api.v1 import events
 from core.config import settings
@@ -28,6 +28,14 @@ async def startup():
 @app.on_event('shutdown')
 async def shutdown():
     await kafka.kafka_producer.stop()
+
+
+@app.middleware('http')
+async def before_request(request: Request, call_next):
+    request_id = request.headers.get('X-Request-Id')
+    if not request_id:
+        raise RuntimeError('request id is required')
+    return await call_next(request)
 
 
 # Подключаем роутер к серверу, указав префикс /v1/events
