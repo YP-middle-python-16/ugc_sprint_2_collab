@@ -22,11 +22,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Create directories
-          run: |
-            mkdir -p reports/api_app/wemake-python-styleguide/
-            mkdir -p reports/etl/wemake-python-styleguide/
-            mkdir -p reports/api_app/mypy/
-            mkdir -p reports/etl/mypy/
+        run: |
+          mkdir -p reports/api_app/wemake-python-styleguide/
+          mkdir -p reports/etl/wemake-python-styleguide/
+          mkdir -p reports/api_app/mypy/
+          mkdir -p reports/etl/mypy/
 
       - name: Install dependencies
         run: |
