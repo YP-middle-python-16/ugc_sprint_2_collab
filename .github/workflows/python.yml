@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install mypy wemake-python-styleguide flake8-html
+          pip install mypy wemake-python-styleguide flake8-html lxml
 
       - name: flake8
         run: |
