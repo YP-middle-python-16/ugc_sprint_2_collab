@@ -21,19 +21,28 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Create directories
+          run: |
+            mkdir -p reports/api_app/wemake-python-styleguide/
+            mkdir -p reports/etl/wemake-python-styleguide/
+            mkdir -p reports/api_app/mypy/
+            mkdir -p reports/etl/mypy/
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install mypy flake8
+          pip install mypy wemake-python-styleguide flake8-html
 
       - name: flake8
-        run: flake8 --config=setup.cfg
+        run: |
+        flake8 api_app/src --config=setup.cfg --format=html --htmldir=reports/api_app/wemake-python-styleguide/
+        flake8 etl/src --config=setup.cfg --format=html --htmldir=reports/etl/wemake-python-styleguide/
 
       - name: mypy_api_app
-        run: mypy api_app --ignore-missing-imports
+        run: mypy api_app --ignore-missing-imports --html-report reports/api_app/mypy/
 
       - name: mypy_etl
-        run: mypy etl --ignore-missing-imports
+        run: mypy etl --ignore-missing-imports --html-report reports/etl/mypy/
 
       - name: send message to telegram
         uses: appleboy/telegram-action@master
