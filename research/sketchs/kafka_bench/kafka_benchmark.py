@@ -2,7 +2,6 @@ import uuid
 from random import randrange
 
 from kafka import KafkaProducer
-from time import sleep
 
 MESSAGES_BATCH_SIZE = 1000000
 BATCHES = 100
@@ -20,7 +19,7 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
 
 for i in range(1, BATCHES):
     for user_id in users:
-        user_current_movie_id = movies[randrange(MOVIE_COUNT-1)]
+        user_current_movie_id = movies[randrange(MOVIE_COUNT - 1)]
         for tick in movie_lengths:
             producer.send(
                 topic=TOPIC,
