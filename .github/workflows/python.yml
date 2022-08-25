@@ -35,8 +35,8 @@ jobs:
 
       - name: flake8
         run: |
-          flake8 api_app/src --config=setup.cfg --format=html --htmldir=reports/api_app/wemake-python-styleguide/
-          flake8 etl/src --config=setup.cfg --format=html --htmldir=reports/etl/wemake-python-styleguide/
+          flake8 api_app/src --exit-zero --config=setup.cfg --format=html --htmldir=reports/api_app/wemake-python-styleguide/
+          flake8 etl/src --exit-zero --config=setup.cfg --format=html --htmldir=reports/etl/wemake-python-styleguide/
 
       - name: mypy_api_app
         run: mypy api_app --ignore-missing-imports --html-report reports/api_app/mypy/
