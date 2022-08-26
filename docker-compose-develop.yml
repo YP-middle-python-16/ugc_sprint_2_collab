@@ -44,6 +44,16 @@ services:
       timeout: 10s
       retries: 10
 
+  nginx:
+    image: nginx:1.21.6
+    restart: always
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/configs:/etc/nginx/conf.d:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - api
   mongo:
     image: 'mongo:5.0.3'
     container_name: mongo
