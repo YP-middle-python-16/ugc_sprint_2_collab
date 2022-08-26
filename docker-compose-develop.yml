@@ -8,7 +8,7 @@ services:
     ports:
       - "8000:8000"
     command: bash -c 'pytest tests && 
-                      gunicorn src.main:app --workers 4 
+                      gunicorn main:app --workers 4 
                       --worker-class uvicorn.workers.UvicornWorker 
                       --bind 0.0.0.0:8000 --reload'
     env_file:

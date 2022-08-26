@@ -7,7 +7,7 @@ WORKDIR $APP_HOME
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-ENV PYTHONPATH "$APP_HOME/src"
+ENV PYTHONPATH "$APP_HOME"
 
 RUN pip install --upgrade pip
 
@@ -21,5 +21,6 @@ RUN pip install --user -r requirements.txt
 
 ENV PATH="/home/app/.local/bin:${PATH}"
 
-COPY --chown=app:app . .
+COPY --chown=app:app ./src .
+COPY --chown=app:app ./tests tests
 RUN ls
