@@ -1,13 +1,28 @@
 import aiokafka
+import sentry_sdk
 import uvicorn
-from fastapi import FastAPI
-from fastapi.responses import ORJSONResponse
+from fastapi import FastAPI, Request
 from fastapi.logger import logger
+from fastapi.responses import ORJSONResponse
+from sentry_sdk.integrations.fastapi import FastApiIntegration
+from sentry_sdk.integrations.starlette import StarletteIntegration
 
 from api.v1 import events
 from core.config import settings
 from db import kafka
 from utils import backoff
+
+sentry_sdk.init(dsn=settings.SENTRY_DSN,
+                integrations=[
+                    StarletteIntegration(),
+                    FastApiIntegration(),
+                ],
+
+                # Set traces_sample_rate to 1.0 to capture 100%
+                # of transactions for performance monitoring.
+                # We recommend adjusting this value in production,
+                traces_sample_rate=1.0,
+                )
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -28,6 +43,14 @@ async def startup():
 @app.on_event('shutdown')
 async def shutdown():
     await kafka.kafka_producer.stop()
+
+
+@app.middleware('http')
+async def before_request(request: Request, call_next):
+    request_id = request.headers.get('X-Request-Id')
+    if settings.CHECK_HEADERS and not request_id:
+        raise RuntimeError('request id is required')
+    return await call_next(request)
 
 
 # Подключаем роутер к серверу, указав префикс /v1/events
