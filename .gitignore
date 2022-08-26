@@ -144,5 +144,6 @@ contracts/rendered
 #  database data
 clickhouse_data
 kafka_data
+mongodata
 
 tests/functional/results
