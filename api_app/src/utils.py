@@ -1,7 +1,9 @@
 import asyncio
+import logging
 from functools import wraps
 
 from fastapi.logger import logger
+from fastapi import Request
 
 
 def backoff(start_sleep_time=0.1, factor=2, border_sleep_time=10):
@@ -35,3 +37,9 @@ def backoff(start_sleep_time=0.1, factor=2, border_sleep_time=10):
         return inner
 
     return func_wrapper
+
+
+class RequestIdFilter(logging.Filter):
+    def filter(self, record):
+        record.request_id = Request.headers.get('X-Request-Id')
+        return True
