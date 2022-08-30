@@ -24,5 +24,8 @@ class Settings(BaseSettings):
     SENTRY_DSN: str = Field(env='SENTRY_DSN',
                             default='https://2d58bf3f78894d5aa32824671303a1ef@o1377615.ingest.sentry.io/6691544')
 
+    LOGSTASH_HOST: str = Field(env='LOGSTASH_HOST', default='logstash')
+    LOGSTASH_PORT: str = Field(env='LOGSTASH_PORT', default=5044)
+
 
 settings = Settings()
