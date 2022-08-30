@@ -1,14 +1,14 @@
-from hl_storage_abstract import HiLoadStorage
 import psycopg2
 from psycopg2.extras import execute_batch
 from psycopg2.extras import DictCursor
 
-import config
+from core import config
+from storages.hl_storage import HiLoadStorage
 
 
 class PostgresStorage(HiLoadStorage):
-
     def __init__(self, connect_param=None):
+        self.sql_dialect = 'clickhouse'
         self.pg_conn = psycopg2.connect(**config.PG_DLS, cursor_factory=DictCursor)
         self.cur = self.pg_conn.cursor()
 
@@ -17,10 +17,10 @@ class PostgresStorage(HiLoadStorage):
 
 
 
-    def insert(self, data=None):
+    def insert_old(self, data=None):
         pass
 
-    def insert_batch(self, data=None, batch_size: int = 10):
+    def insert_batch_old(self, data=None, batch_size: int = 10):
         cur = self.cur
         saved_table = []
         for row in data:
@@ -32,7 +32,7 @@ class PostgresStorage(HiLoadStorage):
         execute_batch(cur, self.insert_query, saved_table, page_size=len(data))
         self.pg_conn.commit()
 
-    def select(self, data=None):
+    def select_old(self, data=None):
         select_query = f"SELECT * FROM content.movies_statistics " \
                        f"WHERE movie_id = '{data.movie_id}'"
 
@@ -40,3 +40,4 @@ class PostgresStorage(HiLoadStorage):
         cur.execute(select_query)
 
         pass
+

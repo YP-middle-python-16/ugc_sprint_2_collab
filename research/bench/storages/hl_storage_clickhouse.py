@@ -1,10 +1,11 @@
 from clickhouse_driver import Client
-from hl_storage_abstract import HiLoadStorage
+from storages.hl_storage import HiLoadStorage
 
 
 class ClickhouseStorage(HiLoadStorage):
     def __init__(self, connect_param):
         self.client = Client(host=connect_param)
+        self.sql_dialect = 'clickhouse'
 
     def insert(self, data=None):
         query = f"INSERT INTO movies_statistics.view_stat (movie_id, user_id, eventTime, view_run_time) " \

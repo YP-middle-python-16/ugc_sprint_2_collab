@@ -1,9 +1,9 @@
-from hl_storage_abstract import HiLoadStorage
+from storages.hl_storage import HiLoadStorage
 
 
 class DevNullStorage(HiLoadStorage):
     def __init__(self, connect_param = None):
-        pass
+        self.sql_dialect = None
 
     def insert(self, data=None):
         pass

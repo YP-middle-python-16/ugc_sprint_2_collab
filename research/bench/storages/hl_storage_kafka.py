@@ -1,11 +1,12 @@
-import config
+from core import config
 from kafka import KafkaProducer
-from hl_storage_abstract import HiLoadStorage
+from storages.hl_storage import HiLoadStorage
 
 
 class KafkaStorage(HiLoadStorage):
     def __init__(self, connect_param):
         self.producer = KafkaProducer(bootstrap_servers=connect_param)
+        self.sql_dialect = None
 
     def insert(self, data=None):
         value = data.json()

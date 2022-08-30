@@ -1,10 +1,10 @@
-import config
-from hl_storage_kafka import KafkaStorage
-from hl_storage_clickhouse import ClickhouseStorage
-from hl_storage_null import DevNullStorage
-from hl_storage_pg import PostgresStorage
+from core import config
+from storages.hl_storage_kafka import KafkaStorage
+from storages.hl_storage_clickhouse import ClickhouseStorage
+from storages.hl_storage_null import DevNullStorage
+from storages.hl_storage_pg import PostgresStorage
 
-BATCH_SEQUENCE = {
+STORAGES_CATALOG = {
     'Kafka': {
         'storage': 'Kafka',
         'client': KafkaStorage(connect_param=config.KAFKA_CONNECT),

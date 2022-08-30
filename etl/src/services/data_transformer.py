@@ -1,7 +1,7 @@
 from collections import defaultdict
 from typing import Generator
 
-from config import settings
+from core.config import settings
 
 
 class DataTransformer:

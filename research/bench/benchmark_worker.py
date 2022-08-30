@@ -5,10 +5,10 @@ import time
 
 from rich.progress import Progress
 
-import config
-from benchmarks import BATCH_SEQUENCE
-from model import MovieViewEvent, MovieSelection
-from visualization import show_result
+from core import config
+from benchmark.stotages_cataloge import STORAGES_CATALOG
+from models.model import MovieViewEvent, MovieSelection
+from ui.ui_cli import show_result
 
 
 class BenchMark:
@@ -79,12 +79,12 @@ class BenchMark:
         return counter
 
     def benchmark_service(self, storage, mode):
-        service = BATCH_SEQUENCE[storage]['client']
+        service = STORAGES_CATALOG[storage]['client']
 
         # insert
         counter_insert = 0
         timer_insert = 0
-        if BATCH_SEQUENCE[storage]['use_insert']:
+        if STORAGES_CATALOG[storage]['use_insert']:
             t0 = time.time()
             self.tasks[storage + ":insert"] = self.progress.add_task(f"[cyan]{storage} insert",
                                                                      total=config.BATCHES - 1)
@@ -103,7 +103,7 @@ class BenchMark:
         # select
         counter_select = 0
         timer_select = 0
-        if BATCH_SEQUENCE[storage]['use_select']:
+        if STORAGES_CATALOG[storage]['use_select']:
             t0 = time.time()
             self.tasks[storage + ":select"] = self.progress.add_task(f"[cyan]{storage} select",
                                                                      total=config.BATCHES - 1)
@@ -130,10 +130,10 @@ class BenchMark:
         statistics = []
         with Progress() as progress:
             self.progress = progress
-            for item in BATCH_SEQUENCE:
-                if BATCH_SEQUENCE[item]['use']:
-                    mode = BATCH_SEQUENCE[item]['mode']
-                    storage_name = BATCH_SEQUENCE[item]['storage']
+            for item in STORAGES_CATALOG:
+                if STORAGES_CATALOG[item]['use']:
+                    mode = STORAGES_CATALOG[item]['mode']
+                    storage_name = STORAGES_CATALOG[item]['storage']
 
                     row_stat = self.benchmark_service(item, mode)
                     statistics.append(row_stat)
