@@ -49,6 +49,9 @@ class QueueManager:
             worker_statistics = [worker.storage_service.label, worker_time]
             bench_data.append(worker_statistics)
 
+        engine_caption.caption('')
+        my_bar.progress(0)
+
         df = pd.DataFrame(bench_data, columns=cols_labels)
         st.table(df)
 

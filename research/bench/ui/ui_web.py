@@ -1,6 +1,5 @@
 import streamlit as st
-from benchmark_worker import BenchMark
-from benchmark.queue_manager import QueueManager
+from ugc.ugc import ucg_config
 
 
 class ViewUI:
@@ -15,9 +14,9 @@ class ViewUI:
         st.title('Engine speed research 🚀')
 
         with st.form('main_form'):
-            tries = st.slider('Number of tries', 0, 100, 10) / 100
-            ugc_objects = st.select_slider('Number of UGC Objects',
-                                           options=[1000, 10000, 100000, 1000000])
+            tries = st.slider('Number of cycles in bench', 0, 100, 10)
+            ugc_objects = st.select_slider('Number of UGC Objects in one cycle',
+                                           options=[100, 1000, 10000, 100000, 1000000])
 
             storage_insert = st.multiselect('Insert Storages', key='select1',
                                             options=['Postgres', 'ClickHouse', 'Kafka', 'Mongo', 'Null'])
@@ -29,4 +28,7 @@ class ViewUI:
 
             if submitted:
                 if callable(onclick):
+                    ucg_config.BATCHES = int(tries)
+                    ucg_config.OBJECTS_MAX_LIM = int(ugc_objects)
+
                     onclick()
