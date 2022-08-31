@@ -74,7 +74,18 @@ class Bookmark(BaseModel):
                         sort_order=sort_order)
 
 
-class Like(BaseModel):
+class LikeEvent(BaseModel):
+    movie_id: str = None
+    user_id: str = None
+
+    @staticmethod
+    def random():
+        movie_id = str(uuid.uuid4())
+        user_id =str(uuid.uuid4())
+        return LikeEvent(movie_id=movie_id, user_id=user_id)
+
+
+class LikeReport(BaseModel):
     movie_id: str = None
     count: int = None
     user_liked: bool = None
@@ -84,4 +95,4 @@ class Like(BaseModel):
         movie_id = str(uuid.uuid4())
         count = randrange(1, 1000)
         user_liked = True if (randrange(1, 1000) > 500) else False
-        return Like(movie_id=movie_id, count=count, user_liked=user_liked)
+        return LikeReport(movie_id=movie_id, count=count, user_liked=user_liked)

@@ -35,7 +35,7 @@ class UCGViewEvent(UGCProvider):
                     )
                     yield data
 
-    def get_insert_query(self, data, sql_dialect='postgres'):
+    def get_insert_query(self, data, sql_dialect):
         query = ''
         if sql_dialect == 'clickhouse':
             query = f"INSERT INTO movies_statistics.view_stat (movie_id, user_id, eventTime, view_run_time) " \
@@ -47,11 +47,14 @@ class UCGViewEvent(UGCProvider):
 
         return query
 
-    def get_insert_query_batch(self, data, sql_dialect='postgres'):
+    def get_insert_query_batch(self, data, sql_dialect):
         query = ''
         if sql_dialect == 'clickhouse':
+            rows = [f"('{row.movie_id}', '{row.user_id}', '{row.event_time}', {row.view_run_time})" for row in data]
+            s = ","
+            batch = s.join(rows)
             query = f"INSERT INTO movies_statistics.view_stat (movie_id, user_id, eventTime, view_run_time) " \
-                    f"VALUES ('{data.movie_id}', '{data.user_id}', '{data.event_time}', {data.view_run_time})"
+                    f"VALUES {batch}"
 
         if sql_dialect == 'postgres':
             query = 'INSERT INTO content.movies_statistics (movie_id, user_id, event_time, view_run_time) ' \
@@ -59,7 +62,7 @@ class UCGViewEvent(UGCProvider):
 
         return query
 
-    def get_select_query(self, data, sql_dialect='postgres'):
+    def get_select_query(self, data, sql_dialect):
         query = ''
 
         if sql_dialect == 'clickhouse':

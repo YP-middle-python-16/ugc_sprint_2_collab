@@ -22,25 +22,26 @@ class Worker:
     def run_insert_single(self):
         if self.sql_dialect:
             for row in self.data:
-                queue = self.ucg_provider.get_insert_query(row, self.sql_dialect)
-                self.storage_service.insert(row, queue)
+                query = self.ucg_provider.get_insert_query(row, self.sql_dialect)
+                self.storage_service.insert(row, query)
         else:
             for row in self.data:
                 self.storage_service.insert(row)
 
     def run_insert_batch(self):
         if self.sql_dialect:
-            queue = self.ucg_provider.get_insert_query(self.data, self.sql_dialect)
-            self.storage_service.insert(self.data, queue)
+            query = self.ucg_provider.get_insert_query_batch(self.data, self.sql_dialect)
+            self.storage_service.insert_batch(self.data, query)
         else:
-            self.storage_service.insert(self.data)
+            self.storage_service.insert_batch(self.data)
 
+    @timeit
     def run_insert(self):
         if self.mode == 'single':
             self.run_insert_single()
 
-        if self.mode == 'single':
-            self.run_insert_single()
+        if self.mode == 'batch':
+            self.run_insert_batch()
 
     @timeit
     def run_select(self):

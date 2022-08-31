@@ -16,9 +16,8 @@ class ViewUI:
 
         with st.form('main_form'):
             tries = st.slider('Number of tries', 0, 100, 10) / 100
-            ugc_objects = st.select_slider('Number of tries',
+            ugc_objects = st.select_slider('Number of UGC Objects',
                                            options=[1000, 10000, 100000, 1000000])
-
 
             storage_insert = st.multiselect('Insert Storages', key='select1',
                                             options=['Postgres', 'ClickHouse', 'Kafka', 'Mongo', 'Null'])

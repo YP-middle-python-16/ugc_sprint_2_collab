@@ -7,8 +7,9 @@ class KafkaStorage(HiLoadStorage):
     def __init__(self, connect_param):
         self.producer = KafkaProducer(bootstrap_servers=connect_param)
         self.sql_dialect = None
+        self.label = 'Kafka'
 
-    def insert(self, data=None):
+    def insert(self, data=None, query: str = None):
         value = data.json()
         self.producer.send(
             topic=config.KAFKA_TOPIC,
@@ -19,5 +20,5 @@ class KafkaStorage(HiLoadStorage):
     def insert_batch(self, data=None, batch_size: int = 10):
         pass
 
-    def select(self, data=None):
+    def select(self, data=None, queue: str = None):
         pass
