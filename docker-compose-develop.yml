@@ -19,10 +19,6 @@ services:
         max-file: "10"
         max-size: "10m"
     depends_on:
-      - clickhouse-node1
-      - clickhouse-node2
-      - clickhouse-node3
-      - clickhouse-node4
       - kafka-1
       - kafka-2
     healthcheck:
