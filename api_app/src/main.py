@@ -1,11 +1,12 @@
-import logging
+import uuid
 
 import aiokafka
 import logstash
 import sentry_sdk
 import uvicorn
+from asgi_correlation_id import CorrelationIdMiddleware
+from asgi_correlation_id.middleware import is_valid_uuid4
 from fastapi import FastAPI, Request
-from fastapi.logger import logger
 from fastapi.responses import ORJSONResponse
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from sentry_sdk.integrations.fastapi import FastApiIntegration
@@ -13,9 +14,9 @@ from sentry_sdk.integrations.starlette import StarletteIntegration
 
 from api.v1 import events
 from core.config import settings
-from core.logger import LOGGING
+from core.logger import configure_logging, logger
 from db import kafka
-from utils import backoff, RequestIdFilter
+from utils import backoff
 
 sentry_sdk.init(dsn=settings.SENTRY_DSN,
                 integrations=[
@@ -30,6 +31,7 @@ app = FastAPI(
     docs_url='/api/v1/openapi',
     openapi_url='/api/v1/openapi.json',
     default_response_class=ORJSONResponse,
+    on_startup=[configure_logging]
 )
 
 
@@ -43,6 +45,7 @@ async def startup():
 
 @app.on_event('shutdown')
 async def shutdown():
+    logger.info('kafka will be stopped')
     await kafka.kafka_producer.stop()
 
 
@@ -57,17 +60,21 @@ async def before_request(request: Request, call_next):
 # Подключаем роутер к серверу, указав префикс /v1/events
 # Теги указываем для удобства навигации по документации
 app.include_router(events.router, prefix='/api/v1/event', tags=['Event'])
+# Добавим middleware для работы с X-Request-Id (https://github.com/snok/asgi-correlation-id)
+app.add_middleware(
+    CorrelationIdMiddleware,
+    header_name='X-Request-ID',
+    generator=lambda: uuid.uuid4().hex,
+    validator=is_valid_uuid4,
+    transformer=lambda a: a,
+)
 # Добавим middleware для Sentry
-app.add_middleware(SentryAsgiMiddleware)
-# Добавим фильтр логов по хедеру X-Request-Id
-uvicorn.config.logger.addFilter(RequestIdFilter())
-uvicorn.config.logger.addHandler(logstash.LogstashHandler(settings.LOGSTASH_HOST, settings.LOGSTASH_PORT, version=1))
+# app.add_middleware(SentryAsgiMiddleware)
+logger.addHandler(logstash.LogstashHandler(settings.LOGSTASH_HOST, settings.LOGSTASH_PORT, version=1))
 
 if __name__ == '__main__':
     uvicorn.run(
         'main:app',
         host='0.0.0.0',
-        log_config=LOGGING,
-        log_level=logging.DEBUG,
         port=8000,
     )
