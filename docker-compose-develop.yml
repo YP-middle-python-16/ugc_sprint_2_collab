@@ -198,8 +198,8 @@ services:
     ports:
       - "5044:5044/udp"
     volumes:
-      - /elk/logstash.conf:/config/elk.conf:ro
-    command: elk -f /config/elk.conf
+      - /elk/logstash.conf:/config/logstash.conf:ro
+    command: logstash -f /config/logstash.conf
 
   elasticsearch:
     image: elasticsearch:7.17.4
