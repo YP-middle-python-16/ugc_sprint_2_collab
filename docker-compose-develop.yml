@@ -13,23 +13,11 @@ services:
       --bind 0.0.0.0:8000 --reload'
     env_file:
       - api_app/src/core/.env.dev
-    depends_on:
-      - kafka-1
-      - kafka-2
-    healthcheck:
-      test: nc -z kafka-1 9092 || nc -z kafka-2 9092 || exit -1
-      start_period: 15s
-      interval: 5s
-      timeout: 10s
-      retries: 10
-
-  etl:
-    build: etl
-    restart: always
-    container_name: etl
-    env_file:
-      - etl/.env
-    command: python src/main.py
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "10m"
     depends_on:
       - clickhouse-node1
       - clickhouse-node2
