@@ -191,6 +191,8 @@ services:
       - ./elk/logstash.conf:/config/logstash.conf:ro
       - ./tmp/logs/nginx/:/var/log/nginx/:ro
     command: logstash -f /config/logstash.conf
+    depends_on:
+      - elasticsearch
 
   elasticsearch:
     image: elasticsearch:7.17.4
