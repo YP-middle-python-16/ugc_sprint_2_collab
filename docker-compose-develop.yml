@@ -35,6 +35,7 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/configs:/etc/nginx/conf.d:ro
+      - ./tmp/logs/nginx/:/var/log/nginx/:ro
     ports:
       - "80:80"
     depends_on:
@@ -101,6 +102,7 @@ services:
   zookeeper-1:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper-1
+    restart: on-failure
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -108,6 +110,7 @@ services:
   zookeeper-2:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper-2
+    restart: on-failure
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -115,6 +118,7 @@ services:
   kafka-1:
     image: confluentinc/cp-kafka:latest
     container_name: kafka-1
+    restart: on-failure
     depends_on:
       - zookeeper-1
       - zookeeper-2
@@ -137,6 +141,7 @@ services:
   kafka-2:
     image: confluentinc/cp-kafka:latest
     container_name: kafka-2
+    restart: on-failure
     depends_on:
       - zookeeper-1
       - zookeeper-2
@@ -177,16 +182,19 @@ services:
 
   logstash:
     image: logstash:7.10.1
+    container_name: logstash
     env_file:
       - elk/env.logstash
     ports:
       - "5044:5044/udp"
     volumes:
-      - /elk/logstash.conf:/config/logstash.conf:ro
+      - ./elk/logstash.conf:/config/logstash.conf:ro
+      - ./tmp/logs/nginx/:/var/log/nginx/:ro
     command: logstash -f /config/logstash.conf
 
   elasticsearch:
     image: elasticsearch:7.17.4
+    container_name: elasticsearch
     environment:
       discovery.type: single-node
     ports:
@@ -196,6 +204,7 @@ services:
 
   kibana:
     image: kibana:7.17.4
+    container_name: kibana
     ports:
       - "5601:5601"
     depends_on:
