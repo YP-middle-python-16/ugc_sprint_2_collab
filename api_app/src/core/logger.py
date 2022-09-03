@@ -1,3 +1,6 @@
+import logging
+from logging.config import dictConfig
+
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 LOG_DEFAULT_HANDLERS = ['console', ]
 
@@ -9,6 +12,10 @@ LOG_DEFAULT_HANDLERS = ['console', ]
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'filters': {
+        'correlation_id': {'()': 'asgi_correlation_id.CorrelationIdFilter',
+                           'uuid_length': 32, },
+    },
     'formatters': {
         'verbose': {
             'format': LOG_FORMAT
@@ -22,12 +29,17 @@ LOGGING = {
             '()': 'uvicorn.logging.AccessFormatter',
             'fmt': "%(levelprefix)s %(client_addr)s - '%(request_line)s' %(status_code)s",
         },
+        'console': {
+            'class': 'logging.Formatter',
+            'datefmt': '%H:%M:%S',
+            'format': '%(levelname)s: \t  %(asctime)s %(name)s:%(lineno)d [%(correlation_id)s] %(message)s',
+        },
     },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
+            'filters': ['correlation_id'],
+            'formatter': 'console',
         },
         'default': {
             'formatter': 'default',
@@ -45,6 +57,11 @@ LOGGING = {
             'handlers': LOG_DEFAULT_HANDLERS,
             'level': 'INFO',
         },
+        'api': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
         'uvicorn.error': {
             'level': 'INFO',
         },
@@ -53,6 +70,11 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
+        'asgi_correlation_id': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+        },
+
     },
     'root': {
         'level': 'INFO',
@@ -60,3 +82,10 @@ LOGGING = {
         'handlers': LOG_DEFAULT_HANDLERS,
     },
 }
+
+
+def configure_logging():
+    dictConfig(LOGGING)
+
+
+logger = logging.getLogger('api')
