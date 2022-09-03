@@ -1,3 +1,4 @@
+import logging
 import uuid
 
 import aiokafka
@@ -14,7 +15,7 @@ from sentry_sdk.integrations.starlette import StarletteIntegration
 
 from api.v1 import events
 from core.config import settings
-from core.logger import configure_logging, logger
+from core.logger import configure_logging, logger, LOGGING
 from db import kafka
 from utils import backoff
 
@@ -69,7 +70,7 @@ app.add_middleware(
     transformer=lambda a: a,
 )
 # Добавим middleware для Sentry
-# app.add_middleware(SentryAsgiMiddleware)
+app = SentryAsgiMiddleware(app)
 logger.addHandler(logstash.LogstashHandler(settings.LOGSTASH_HOST, settings.LOGSTASH_PORT, version=1))
 
 if __name__ == '__main__':
@@ -77,4 +78,6 @@ if __name__ == '__main__':
         'main:app',
         host='0.0.0.0',
         port=8000,
+        log_config=LOGGING,
+        log_level=logging.DEBUG,
     )
