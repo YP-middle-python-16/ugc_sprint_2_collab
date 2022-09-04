@@ -3,12 +3,13 @@ from storages.hl_storage_kafka import KafkaStorage
 from storages.hl_storage_clickhouse import ClickhouseStorage
 from storages.hl_storage_null import DevNullStorage
 from storages.hl_storage_pg import PostgresStorage
+from storages.hl_storage_mongo import MongoDBStorage
 
 STORAGES_CATALOG = {
     'Kafka': {
         'storage': 'Kafka',
         'client': KafkaStorage(connect_param=config.KAFKA_CONNECT),
-        'use': True,
+        'use': False,
         'use_insert': True,
         'use_select': False,
         'mode': 'single'
@@ -29,10 +30,18 @@ STORAGES_CATALOG = {
         'use_select': True,
         'mode': 'batch'
     },
+    'Mongo_batch':{
+        'storage': 'MondoDB',
+        'client': MongoDBStorage(connect_param=config.MONGODB_CONNECT),
+        'use': True,
+        'use_insert': True,
+        'use_select': True,
+        'mode': 'batch'
+    },
     'Postgres batch': {
         'storage': 'Postgres',
         'client': PostgresStorage(connect_param=config.PG_DLS),
-        'use': True,
+        'use': False,
         'use_insert': True,
         'use_select': True,
         'mode': 'batch'

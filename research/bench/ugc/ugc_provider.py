@@ -11,13 +11,13 @@ class UGCProvider:
         pass
 
     @abc.abstractmethod
-    def get_insert_query(self,data, sql_dialect='postgres'):
+    def get_insert_query(self, data, sql_dialect):
         pass
 
     @abc.abstractmethod
-    def get_insert_query_batch(self, data, sql_dialect='postgres'):
+    def get_insert_query_batch(self, data, sql_dialect):
         pass
 
     @abc.abstractmethod
-    def get_select_query(self, data, sql_dialect='postgres'):
+    def get_select_query(self, data, sql_dialect):
         pass

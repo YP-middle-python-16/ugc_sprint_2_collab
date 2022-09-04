@@ -19,7 +19,7 @@ class UCGViewEvent(UGCProvider):
     def generate(self, limit):
         counter = 0
         while counter <= limit:
-            counter = counter+1
+            counter = counter + 1
 
             time_now = datetime.now()
             time_now = time_now.strftime("%Y-%m-%d %H:%M:%S")
@@ -45,6 +45,9 @@ class UCGViewEvent(UGCProvider):
             query = 'INSERT INTO content.movies_statistics (movie_id, user_id, event_time, view_run_time) ' \
                     'VALUES (%s, %s, %s, %s) '
 
+        if sql_dialect == 'mongo':
+            query = 'movies_statistics'
+
         return query
 
     def get_insert_query_batch(self, data, sql_dialect):
@@ -60,6 +63,9 @@ class UCGViewEvent(UGCProvider):
             query = 'INSERT INTO content.movies_statistics (movie_id, user_id, event_time, view_run_time) ' \
                     'VALUES (%s, %s, %s, %s) '
 
+        if sql_dialect == 'mongo':
+            query = 'movies_statistics'
+
         return query
 
     def get_select_query(self, data, sql_dialect):
@@ -72,5 +78,8 @@ class UCGViewEvent(UGCProvider):
         if sql_dialect == 'postgres':
             query = f"SELECT * FROM content.movies_statistics " \
                     f"WHERE movie_id = '{data.movie_id}'"
+
+        if sql_dialect == 'mongo':
+            query = 'movies_statistics'
 
         return query

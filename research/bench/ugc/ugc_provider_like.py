@@ -22,6 +22,9 @@ class UGCLike(UGCProvider):
             query = 'INSERT INTO content.movies_likes (movie_id, user_id) ' \
                     'VALUES (%s, %s) '
 
+        if sql_dialect == 'mongo':
+            query = 'likes'
+
         return query
 
     def get_insert_query_batch(self, data, sql_dialect='postgres'):

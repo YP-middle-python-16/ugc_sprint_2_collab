@@ -5,6 +5,9 @@ KAFKA_CONNECT = ['localhost:9092']
 
 CLICKHOUSE_CONNECT = 'localhost'
 
+MONGODB_CONNECT = 'mongodb://root:example@localhost/'
+
+
 PG_DLS_1 = {'dbname': os.environ.get('DB_NAME'),
             'user': os.environ.get('DB_USER'),
             'password': os.environ.get('DB_PASSWORD'),
