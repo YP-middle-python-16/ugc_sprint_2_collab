@@ -9,3 +9,5 @@ exclude = '''
     | \.mypy_cache
 )
 '''
+[tool.isort]
+skip = [".gitignore", ".dockerignore", "env", ".mypy_cache","reports"]
