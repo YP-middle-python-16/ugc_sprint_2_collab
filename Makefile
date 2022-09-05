@@ -1,7 +1,7 @@
 deps:    ## Install dependencies
 	python -m pip install --upgrade pip
 	pip install -r lint-requirements.txt
-	pip install -r api_app/requirements
+	pip install -r api_app/requirements.txt
 create-dir:
 	mkdir -p reports/wemake-python-styleguide/
 	mkdir -p reports/mypy/api_app/
