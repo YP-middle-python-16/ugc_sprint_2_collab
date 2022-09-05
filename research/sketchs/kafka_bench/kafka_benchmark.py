@@ -15,7 +15,7 @@ users = [uuid.uuid4() for i in range(1, USER_COUNT)]
 movies = [uuid.uuid4() for i in range(1, MOVIE_COUNT)]
 movie_lengths = [randrange(MOVIE_MAX_LEN) for i in range(1, MOVIE_COUNT)]
 
-producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
+producer = KafkaProducer(bootstrap_servers=["localhost:9092"])
 
 for i in range(1, BATCHES):
     for user_id in users:
@@ -24,6 +24,6 @@ for i in range(1, BATCHES):
             producer.send(
                 topic=TOPIC,
                 value=bytes(str(tick), encoding="utf-8"),
-                key=bytes(f'{user_id}_{user_current_movie_id}', encoding="utf-8")
+                key=bytes(f"{user_id}_{user_current_movie_id}", encoding="utf-8"),
             )
     print(i)

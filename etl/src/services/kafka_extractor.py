@@ -14,13 +14,15 @@ from services import logger
 
 
 class KafkaExtractor:
-    def __init__(self,
-                 bootstrap_servers: str,
-                 topic_list: list,
-                 group_id: str = None,
-                 batch_size: int = 500,
-                 auto_offset_reset: str = 'earliest',
-                 **kwargs):
+    def __init__(
+        self,
+        bootstrap_servers: str,
+        topic_list: list,
+        group_id: str = None,
+        batch_size: int = 500,
+        auto_offset_reset: str = "earliest",
+        **kwargs,
+    ):
         self._bootstrap_servers = bootstrap_servers
         self._topic_list = topic_list
         self._group_id = group_id
@@ -35,10 +37,10 @@ class KafkaExtractor:
         if not self._config:
             self._config.update(
                 {
-                    'bootstrap_servers': self._bootstrap_servers,
-                    'group_id': self._group_id,
-                    'max_poll_records': self._max_poll_records,
-                    'auto_offset_reset': self._auto_offset_reset,
+                    "bootstrap_servers": self._bootstrap_servers,
+                    "group_id": self._group_id,
+                    "max_poll_records": self._max_poll_records,
+                    "auto_offset_reset": self._auto_offset_reset,
                     **self._meta,
                 },
             )
@@ -49,10 +51,8 @@ class KafkaExtractor:
         if self._consumer:
             return self._consumer
 
-        consumer: _KafkaConsumer = _KafkaConsumer(
-            value_deserializer=lambda x: json.loads(x.decode('utf-8')),
-            **self.config)
-        logger.info(f'Kafka consumer is started with options: {self.config}')
+        consumer: _KafkaConsumer = _KafkaConsumer(value_deserializer=lambda x: json.loads(x.decode("utf-8")), **self.config)
+        logger.info(f"Kafka consumer is started with options: {self.config}")
 
         self._consumer = consumer
         return self._consumer
@@ -69,8 +69,9 @@ class KafkaExtractor:
             return
         for consumer_record_list in messages_dict.values():
             for consumer_record in consumer_record_list:
-                logger.info(f'Got message from offset="{consumer_record.offset}" '
-                            f'and partition="{consumer_record.partition}"')
+                logger.info(
+                    f'Got message from offset="{consumer_record.offset}" ' f'and partition="{consumer_record.partition}"'
+                )
                 yield Message(topic=consumer_record.topic, body=FilmViewEvent(**consumer_record.value))
                 self.commit(consumer_record)
 
@@ -78,7 +79,7 @@ class KafkaExtractor:
         """
         Подписка на топик
         """
-        logger.info(f'Describe to topic {self._topic_list}')
+        logger.info(f"Describe to topic {self._topic_list}")
         self.consumer.subscribe(self._topic_list)
 
     def commit(self, message: ConsumerRecord):
@@ -88,7 +89,7 @@ class KafkaExtractor:
         """
         if not self._group_id:
             return
-        logger.info(f'Commit message from offset={message.offset}')
+        logger.info(f"Commit message from offset={message.offset}")
         tp = TopicPartition(message.topic, message.partition)
         meta = self.consumer.partitions_for_topic(message.topic)
         options = {tp: OffsetAndMetadata(message.offset + 1, meta)}
@@ -98,6 +99,6 @@ class KafkaExtractor:
         """
         Метод закрывает соединение консьюмера с kafka
         """
-        logger.info('Close Kafka consumer')
+        logger.info("Close Kafka consumer")
         self.consumer.close()
         self._consumer = None

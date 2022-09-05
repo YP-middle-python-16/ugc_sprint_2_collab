@@ -10,14 +10,21 @@ from utils import backoff
 
 @backoff()
 def run():
-    with closing(ClickHouseLoader(host=settings.clickhouse_host,
-                                  database=settings.clickhouse_database,
-                                  cluster=settings.clickhouse_cluster,
-                                  batch_size=settings.etl_batch_size)) as clickhouse, closing(
-        KafkaExtractor(bootstrap_servers=settings.kafka_brokers,
-                       topic_list=settings.kafka_topics,
-                       group_id=settings.kafka_group_id,
-                       batch_size=settings.etl_batch_size)) as kafka:
+    with closing(
+        ClickHouseLoader(
+            host=settings.clickhouse_host,
+            database=settings.clickhouse_database,
+            cluster=settings.clickhouse_cluster,
+            batch_size=settings.etl_batch_size,
+        )
+    ) as clickhouse, closing(
+        KafkaExtractor(
+            bootstrap_servers=settings.kafka_brokers,
+            topic_list=settings.kafka_topics,
+            group_id=settings.kafka_group_id,
+            batch_size=settings.etl_batch_size,
+        )
+    ) as kafka:
         # subscribe to topic
         kafka.subscribe()
         # init database
@@ -30,22 +37,29 @@ def run():
 
 @backoff()
 def wait_for_services():
-    with closing(ClickHouseLoader(host=settings.clickhouse_host,
-                                  database=settings.clickhouse_database,
-                                  cluster=settings.clickhouse_cluster,
-                                  batch_size=settings.etl_batch_size)) as clickhouse, closing(
-        KafkaExtractor(bootstrap_servers=settings.kafka_brokers,
-                       topic_list=settings.kafka_topics,
-                       group_id=settings.kafka_group_id,
-                       batch_size=settings.etl_batch_size)) as kafka:
+    with closing(
+        ClickHouseLoader(
+            host=settings.clickhouse_host,
+            database=settings.clickhouse_database,
+            cluster=settings.clickhouse_cluster,
+            batch_size=settings.etl_batch_size,
+        )
+    ) as clickhouse, closing(
+        KafkaExtractor(
+            bootstrap_servers=settings.kafka_brokers,
+            topic_list=settings.kafka_topics,
+            group_id=settings.kafka_group_id,
+            batch_size=settings.etl_batch_size,
+        )
+    ) as kafka:
         # clickhouse
-        clickhouse.client.execute('SHOW DATABASES')
+        clickhouse.client.execute("SHOW DATABASES")
 
         # kafka
         kafka.consumer.subscription()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     wait_for_services()
     while True:
         run()

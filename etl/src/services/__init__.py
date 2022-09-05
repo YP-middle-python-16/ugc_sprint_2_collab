@@ -1,3 +1,3 @@
 import logging
 
-logger = logging.getLogger('etl')
+logger = logging.getLogger("etl")

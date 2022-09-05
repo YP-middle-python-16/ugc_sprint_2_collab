@@ -1,0 +1,4 @@
+mypy==0.971
+wemake-python-styleguide==0.16.1
+flake8-html==0.4.2
+lxml==4.9.1

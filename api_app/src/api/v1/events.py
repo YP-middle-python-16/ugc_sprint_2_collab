@@ -7,14 +7,7 @@ from services.service_locator import get_event_service
 router = APIRouter()
 
 
-@router.post(
-    '/',
-    response_model=StatusMessage,
-    summary="Post event message info",
-    description="Post event message info"
-)
-async def message(event_message: EventMessage,
-                  event_service: EventService = Depends(get_event_service)) -> StatusMessage:
+@router.post("/", response_model=StatusMessage, summary="Post event message info", description="Post event message info")
+async def message(event_message: EventMessage, event_service: EventService = Depends(get_event_service)) -> StatusMessage:
     await event_service.send_message(event_message)
-
     return StatusMessage(head="ok", body="all ok")

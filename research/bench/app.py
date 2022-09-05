@@ -34,7 +34,7 @@ class BenchMark:
                     movie_id=str(user_current_movie_id),
                     user_id=str(self.users[user_counter]),
                     event_time=time_now,
-                    view_run_time=tick
+                    view_run_time=tick,
                 )
                 counter = counter + 1
                 service.insert(data=data)
@@ -55,7 +55,7 @@ class BenchMark:
                     movie_id=str(user_current_movie_id),
                     user_id=str(self.users[user_counter]),
                     event_time=time_now,
-                    view_run_time=tick
+                    view_run_time=tick,
                 )
                 counter = counter + 1
                 data.append(row)
@@ -69,25 +69,21 @@ class BenchMark:
 
         for user_counter in range(1, config.USER_COUNT - 1):
             user_current_movie_id = self.user_movie[user_counter]
-            movie = MovieSelection(
-                movie_id=str(user_current_movie_id),
-                user_id=str(self.users[user_counter])
-            )
+            movie = MovieSelection(movie_id=str(user_current_movie_id), user_id=str(self.users[user_counter]))
             counter = counter + 1
             service.select(data=movie)
 
         return counter
 
     def benchmark_service(self, storage, mode):
-        service = BATCH_SEQUENCE[storage]['client']
+        service = BATCH_SEQUENCE[storage]["client"]
 
         # insert
         counter_insert = 0
         timer_insert = 0
-        if BATCH_SEQUENCE[storage]['use_insert']:
+        if BATCH_SEQUENCE[storage]["use_insert"]:
             t0 = time.time()
-            self.tasks[storage + ":insert"] = self.progress.add_task(f"[cyan]{storage} insert",
-                                                                     total=config.BATCHES - 1)
+            self.tasks[storage + ":insert"] = self.progress.add_task(f"[cyan]{storage} insert", total=config.BATCHES - 1)
             current_count = 0
             for i in range(1, config.BATCHES):
                 if mode == "single":
@@ -103,10 +99,9 @@ class BenchMark:
         # select
         counter_select = 0
         timer_select = 0
-        if BATCH_SEQUENCE[storage]['use_select']:
+        if BATCH_SEQUENCE[storage]["use_select"]:
             t0 = time.time()
-            self.tasks[storage + ":select"] = self.progress.add_task(f"[cyan]{storage} select",
-                                                                     total=config.BATCHES - 1)
+            self.tasks[storage + ":select"] = self.progress.add_task(f"[cyan]{storage} select", total=config.BATCHES - 1)
             for i in range(1, config.BATCHES):
                 current_count = self.benchmark_service_select(service=service)
 
@@ -116,12 +111,12 @@ class BenchMark:
             timer_select = time.time() - t0
 
         row_stat = {
-            'storage': storage,
-            'mode': mode,
-            'runtime_insert': timer_insert,
-            'runtime_select': timer_select,
-            'counter_insert': counter_insert,
-            'counter_select': counter_select
+            "storage": storage,
+            "mode": mode,
+            "runtime_insert": timer_insert,
+            "runtime_select": timer_select,
+            "counter_insert": counter_insert,
+            "counter_select": counter_select,
         }
 
         return row_stat
@@ -131,8 +126,8 @@ class BenchMark:
         with Progress() as progress:
             self.progress = progress
             for item in BATCH_SEQUENCE:
-                if BATCH_SEQUENCE[item]['use']:
-                    mode = BATCH_SEQUENCE[item]['mode']
+                if BATCH_SEQUENCE[item]["use"]:
+                    mode = BATCH_SEQUENCE[item]["mode"]
                     # storage_name = BATCH_SEQUENCE[item]['storage']
 
                     row_stat = self.benchmark_service(item, mode)
@@ -141,7 +136,7 @@ class BenchMark:
         return statistics
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = BenchMark()
     statistics = app.run()
     show_result(statistics)

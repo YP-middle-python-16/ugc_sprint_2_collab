@@ -44,9 +44,7 @@ class Spectator:
         time_now = datetime.now()
         time_now = time_now.strftime("%Y-%m-%d %H:%M:%S")
 
-        msg = FilmViewEvent(user_id=str(self.user_id),
-                            movie_id=str(self.movie_id),
-                            event_time=time_now,
-                            view_second=self.current_second
-                            )
+        msg = FilmViewEvent(
+            user_id=str(self.user_id), movie_id=str(self.movie_id), event_time=time_now, view_second=self.current_second
+        )
         return msg

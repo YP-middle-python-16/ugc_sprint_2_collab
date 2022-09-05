@@ -4,11 +4,7 @@ from config import settings
 
 
 class ClickHouseLoader:
-    def __init__(self,
-                 host: str,
-                 database: str,
-                 batch_size: int = 500,
-                 cluster: str = 'company_cluster'):
+    def __init__(self, host: str, database: str, batch_size: int = 500, cluster: str = "company_cluster"):
         self._host = host
         self._database = database
         self._batch_size = batch_size
@@ -32,7 +28,7 @@ class ClickHouseLoader:
         for table_name, data_list in data.items():
             # load data
             self.client.execute(
-                f'INSERT INTO {self._database}.{table_name} VALUES',
+                f"INSERT INTO {self._database}.{table_name} VALUES",
                 data_list,
             )
 
@@ -40,16 +36,18 @@ class ClickHouseLoader:
         """
         Создаем БД, если она отсутствует
         """
-        self.client.execute(f'CREATE DATABASE IF NOT EXISTS {self._database} ON CLUSTER {self._cluster}')
+        self.client.execute(f"CREATE DATABASE IF NOT EXISTS {self._database} ON CLUSTER {self._cluster}")
 
     def create_tables(self):
         """
         Создаем таблицы, если она отсутствует, новые таблицы добавляем сюда же
         """
-        self.client.execute(f'CREATE TABLE IF NOT EXISTS {self._database}.{settings.clickhouse_film_view_table} '
-                            f'ON CLUSTER {self._cluster} '
-                            '(user_id String, movie_id String, event_time DateTime, view_second Int32) '
-                            'Engine=MergeTree() ORDER BY user_id')
+        self.client.execute(
+            f"CREATE TABLE IF NOT EXISTS {self._database}.{settings.clickhouse_film_view_table} "
+            f"ON CLUSTER {self._cluster} "
+            "(user_id String, movie_id String, event_time DateTime, view_second Int32) "
+            "Engine=MergeTree() ORDER BY user_id"
+        )
 
     def close(self):
         self.client.disconnect()

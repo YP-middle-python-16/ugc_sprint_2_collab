@@ -25,8 +25,8 @@ def backoff(start_sleep_time=0.1, factor=2, border_sleep_time=10):
                 try:
                     return await func(*args, **kwargs)
                 except Exception as e:
-                    sleep_time = start_sleep_time * factor ** n
-                    logger.info(f'sleep_time: {sleep_time}, border_sleep_time: {border_sleep_time}')
+                    sleep_time = start_sleep_time * factor**n
+                    logger.info(f"sleep_time: {sleep_time}, border_sleep_time: {border_sleep_time}")
                     if sleep_time >= border_sleep_time:
                         raise e
                     await asyncio.sleep(sleep_time)

@@ -12,7 +12,7 @@ class KafkaStorage(HiLoadStorage):
         self.producer.send(
             topic=config.KAFKA_TOPIC,
             value=bytes(value, encoding="utf-8"),
-            key=bytes(f'{data.user_id}_{data.movie_id}', encoding="utf-8")
+            key=bytes(f"{data.user_id}_{data.movie_id}", encoding="utf-8"),
         )
 
     def insert_batch(self, data=None, batch_size: int = 10):
