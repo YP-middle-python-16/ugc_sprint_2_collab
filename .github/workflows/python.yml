@@ -35,8 +35,8 @@ jobs:
           path: reports/
 
       - name: Test API
-          run: |
-            PYTHONPATH="api_app/src" python -m pytest api_app/tests
+        run: |
+          PYTHONPATH="api_app/src" python -m pytest api_app/tests
 
   notify:
     runs-on: ubuntu-latest
