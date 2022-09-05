@@ -35,17 +35,17 @@ class LikeEvent(ORJSONModel):
 
 
 class Comment(ORJSONModel):
-    user_id: str = None
-    movie_id: str = None
-    event_time: datetime = None
-    title: str = None
-    body: str = None
-    score: int = None
+    user_id: str
+    movie_id: str
+    event_time: datetime
+    title: str
+    body: str
+    score: int
 
 
 class Bookmark(ORJSONModel):
-    user_id: str = None
-    movie_id: str = None
-    label: str = None
-    category: str = None
-    sort_order: int = None
+    user_id: str
+    movie_id: str
+    label: str
+    category: str
+    sort_order: int
