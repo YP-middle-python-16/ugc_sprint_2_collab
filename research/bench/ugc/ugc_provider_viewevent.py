@@ -1,10 +1,11 @@
-from ugc.ugc_provider import UGCProvider
-from ugc.ugc import ucg_config
+import json
 import uuid
 from random import randrange
-from dataclasses import dataclass
-from models.model import MovieViewEvent
 from datetime import datetime
+
+from ugc.ugc_provider import UGCProvider
+from ugc.ugc import ucg_config
+from models.model import MovieViewEvent
 
 
 class UCGViewEvent(UGCProvider):
@@ -18,9 +19,7 @@ class UCGViewEvent(UGCProvider):
 
     def generate(self, limit):
         counter = 0
-        while counter <= limit:
-            counter = counter + 1
-
+        while True:
             time_now = datetime.now()
             time_now = time_now.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -34,6 +33,11 @@ class UCGViewEvent(UGCProvider):
                         view_run_time=tick
                     )
                     yield data
+
+                    counter = counter + 1
+                    if counter > limit:
+                        return True
+
 
     def get_insert_query(self, data, sql_dialect):
         query = ''
@@ -80,6 +84,10 @@ class UCGViewEvent(UGCProvider):
                     f"WHERE movie_id = '{data.movie_id}'"
 
         if sql_dialect == 'mongo':
-            query = 'movies_statistics'
+            collection = 'movies_statistics'
+            data_select = {'movie_id': data.movie_id}
+
+            json_object = json.dumps(data_select, indent=4)
+            query = (collection, json_object)
 
         return query

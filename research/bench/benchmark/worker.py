@@ -12,7 +12,8 @@ class Worker:
         self.data = []
         self.mode = mode
 
-    def prepare_data_insert(self):
+    def prepare_data(self):
+        self.data = []
         for row in self.ucg_provider.generate(ucg_config.OBJECTS_MAX_LIM):
             self.data.append(row)
 
@@ -45,4 +46,6 @@ class Worker:
 
     @timeit
     def run_select(self):
-        pass
+        for row in self.data:
+            query = self.ucg_provider.get_select_query(row, self.sql_dialect)
+            self.storage_service.select(row, query)

@@ -30,7 +30,7 @@ STORAGES_CATALOG = {
         'use_select': True,
         'mode': 'batch'
     },
-    'Mongo_batch':{
+    'Mongo_batch': {
         'storage': 'MondoDB',
         'client': MongoDBStorage(connect_param=config.MONGODB_CONNECT),
         'use': True,
@@ -41,7 +41,7 @@ STORAGES_CATALOG = {
     'Postgres batch': {
         'storage': 'Postgres',
         'client': PostgresStorage(connect_param=config.PG_DLS),
-        'use': False,
+        'use': True,
         'use_insert': True,
         'use_select': True,
         'mode': 'batch'

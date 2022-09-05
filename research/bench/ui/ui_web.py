@@ -1,5 +1,6 @@
 import streamlit as st
 from ugc.ugc import ucg_config
+from benchmark.stotages_cataloge import STORAGES_CATALOG
 
 
 class ViewUI:
@@ -13,16 +14,21 @@ class ViewUI:
         )
         st.title('Engine speed research 🚀')
 
+        storage_labels = []
+
+        for item in STORAGES_CATALOG:
+            if STORAGES_CATALOG[item]['use']:
+                storage_name = STORAGES_CATALOG[item]['storage']
+                storage_labels.append(storage_name)
+
         with st.form('main_form'):
-            tries = st.slider('Number of cycles in bench', 0, 100, 10)
+            tries = st.slider('Number of cycles in bench', 1, 100, 10)
             ugc_objects = st.select_slider('Number of UGC Objects in one cycle',
-                                           options=[100, 1000, 10000, 100000, 1000000])
+                                           options=[10, 30, 100, 300, 1000, 3000, 10000, 30000, 100000, 300000,
+                                                    1000000])
 
-            storage_insert = st.multiselect('Insert Storages', key='select1',
-                                            options=['Postgres', 'ClickHouse', 'Kafka', 'Mongo', 'Null'])
-
-            storage_select = st.multiselect('Read Storages', key='select2',
-                                            options=['Postgres', 'ClickHouse', 'Kafka', 'Mongo', 'Null'])
+            storage = st.multiselect('Insert Storages', key='select1',
+                                     options=storage_labels)
 
             submitted = st.form_submit_button('Run Benchmark')
 

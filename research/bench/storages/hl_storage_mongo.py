@@ -3,6 +3,8 @@ from pymongo import MongoClient
 import pymongo
 
 
+
+
 class MongoDBStorage(HiLoadStorage):
     def __init__(self, connect_param=None):
         self.sql_dialect = 'mongo'
@@ -29,6 +31,7 @@ class MongoDBStorage(HiLoadStorage):
         collection.insert_many(data_dict)
 
     def select(self, data=None, query: str = None):
-        collection = self.db[query]
-        results = collection.find(query)
-        return [r for r in results]
+        collection, data_dict = query
+
+        results = collection.find(data_dict)
+        return results
