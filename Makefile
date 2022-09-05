@@ -3,8 +3,8 @@ deps:    ## Install dependencies
 	pip install -r lint-requirements.txt
 create-dir:
 	mkdir -p reports/wemake-python-styleguide/
-    mkdir -p reports/mypy/api_app/
-    mkdir -p reports/mypy/etl/
+	mkdir -p reports/mypy/api_app/
+	mkdir -p reports/mypy/etl/
 lint: create-dir ## Lint and static-check
 	black --check .
 	flake8 . --exit-zero --config=setup.cfg  --htmldir=reports/wemake-python-styleguide/
