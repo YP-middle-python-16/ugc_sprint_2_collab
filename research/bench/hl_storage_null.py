@@ -2,7 +2,7 @@ from hl_storage_abstract import HiLoadStorage
 
 
 class DevNullStorage(HiLoadStorage):
-    def __init__(self, connect_param = None):
+    def __init__(self, connect_param=None):
         pass
 
     def insert(self, data=None):

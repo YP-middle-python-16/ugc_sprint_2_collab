@@ -15,5 +15,5 @@ class HiLoadStorage:
         pass
 
     @abc.abstractmethod
-    def select(self, data = None):
+    def select(self, data=None):
         pass

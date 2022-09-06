@@ -8,6 +8,6 @@ from services.event_service import EventService
 
 @lru_cache()
 def get_event_service(
-        kafka_producer: AsyncMessageQueue = Depends(get_kafka_producer),
+    kafka_producer: AsyncMessageQueue = Depends(get_kafka_producer),
 ) -> EventService:
     return EventService(kafka_producer=kafka_producer)

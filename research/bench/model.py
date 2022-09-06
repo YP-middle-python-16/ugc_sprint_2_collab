@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from datetime import date, datetime, time, timedelta
+from datetime import datetime
 
 
 class MovieViewEvent(BaseModel):

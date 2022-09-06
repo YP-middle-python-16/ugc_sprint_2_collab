@@ -13,7 +13,7 @@ def show_result(statistics):
     for row in statistics:
         if row["counter_insert"] != 0:
             insert_time = 1000000 * row["runtime_insert"] / row["counter_insert"]
-            table.add_row(row['storage'], row['mode'], f'{row["runtime_insert"]:.3f}', f'{insert_time:.3f}')
+            table.add_row(row["storage"], row["mode"], f'{row["runtime_insert"]:.3f}', f"{insert_time:.3f}")
 
     table2 = Table(title="Select benchmark")
 
@@ -24,7 +24,7 @@ def show_result(statistics):
     for row in statistics:
         if row["counter_select"] != 0:
             select_time = 1000000 * row["runtime_select"] / row["counter_insert"]
-            table2.add_row(row['storage'], f'{row["runtime_select"]:.3f}', f'{select_time:.3f}')
+            table2.add_row(row["storage"], f'{row["runtime_select"]:.3f}', f"{select_time:.3f}")
 
     console = Console()
     console.print(table)

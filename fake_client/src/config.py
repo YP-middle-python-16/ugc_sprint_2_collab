@@ -6,7 +6,7 @@ BATCHES = 10
 
 API_TOPIC = "events_topic"
 
-API_HOST = os.environ.get('API_HOST', '0.0.0.0')
-API_PORT = os.environ.get('API_PORT', '8000')
+API_HOST = os.environ.get("API_HOST", "0.0.0.0")
+API_PORT = os.environ.get("API_PORT", "8000")
 
 SLEEP_PAUSE = 0.5
