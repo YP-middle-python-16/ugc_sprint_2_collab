@@ -11,3 +11,10 @@ exclude = '''
 '''
 [tool.isort]
 skip = [".gitignore", ".dockerignore", "env", ".mypy_cache","reports"]
+
+[tool.mypy]
+ignore_missing_imports = true
+exclude = [
+    '^api_app/src/main\.py$',
+
+]
