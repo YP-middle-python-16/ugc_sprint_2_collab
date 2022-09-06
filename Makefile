@@ -9,6 +9,6 @@ create-dir:
 lint: create-dir ## Lint and static-check
 	black --check .
 	flake8 . --exit-zero --config=setup.cfg  --htmldir=reports/wemake-python-styleguide/
-	mypy api_app --html-report reports/mypy/api_app/
-	mypy etl --html-report reports/mypy/etl/
+	mypy api_app --config-file=setup.cfg --html-report reports/mypy/api_app/
+	mypy etl --config-file=setup.cfg--html-report reports/mypy/etl/
 	
