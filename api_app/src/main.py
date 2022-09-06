@@ -71,7 +71,7 @@ app.add_middleware(
     transformer=lambda a: a,
 )
 # Добавим middleware для Sentry
-app = SentryAsgiMiddleware(app)
+app = SentryAsgiMiddleware(app)  # type: ignore
 logger.addHandler(logstash.LogstashHandler(settings.LOGSTASH_HOST, settings.LOGSTASH_PORT, version=1))
 
 if __name__ == "__main__":
