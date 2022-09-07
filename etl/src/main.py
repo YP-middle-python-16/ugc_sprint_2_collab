@@ -1,7 +1,7 @@
 import time
 from contextlib import closing
 
-from config import settings
+from core.config import settings
 from services.clickhouse_loader import ClickHouseLoader
 from services.data_transformer import DataTransformer
 from services.kafka_extractor import KafkaExtractor

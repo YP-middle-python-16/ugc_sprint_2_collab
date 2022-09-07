@@ -1,6 +1,6 @@
 from clickhouse_driver import Client
 
-from config import settings
+from core.config import settings
 
 
 class ClickHouseLoader:
