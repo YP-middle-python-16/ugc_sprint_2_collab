@@ -37,7 +37,7 @@ class Comment(BaseModel):
         movie_id = str(uuid.uuid4())
         event_time = random_date(d1, d2)
         title = write_comment("{so|totally|i like|totaly bad|very good}")
-        body = lorem.text()
+        body = lorem.sentence()
         score = choice([-1, 0, 1])
         return Comment(user_id=user_id,
                        movie_id=movie_id,

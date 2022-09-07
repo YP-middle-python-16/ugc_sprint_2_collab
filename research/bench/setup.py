@@ -1,6 +1,9 @@
 from clickhouse_driver import Client
 
 client = Client(host='localhost')
+
+client.execute('DROP DATABASE IF EXISTS movies_statistics ON CLUSTER company_cluster')
+
 client.execute('CREATE DATABASE IF NOT EXISTS movies_statistics ON CLUSTER company_cluster')
 
 new_table_views = 'CREATE TABLE movies_statistics.view_stat ON CLUSTER company_cluster (' \

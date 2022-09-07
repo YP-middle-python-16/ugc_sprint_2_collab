@@ -8,7 +8,7 @@ from storages.hl_storage_mongo import MongoDBStorage
 STORAGES_CATALOG = {
     'Kafka': {
         'storage': 'Kafka',
-        'client': KafkaStorage(connect_param=config.KAFKA_CONNECT),
+        'client':  DevNullStorage(), # KafkaStorage(connect_param=config.KAFKA_CONNECT),
         'use': False,
         'use_insert': True,
         'use_select': False,

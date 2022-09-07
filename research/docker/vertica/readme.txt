@@ -1,1 +1,0 @@
-docker run -p 5434:5434 -e DATABASE_NAME='movies_statistics' -e DATABASE_PASSWORD='qwe123' jbfavre/vertica:latest
