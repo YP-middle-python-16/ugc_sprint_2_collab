@@ -10,6 +10,7 @@ from models.model import MovieViewEvent
 
 class UCGViewEvent(UGCProvider):
     def __init__(self):
+        self.label = 'Views'
         self.users = [uuid.uuid4() for i in range(1, ucg_config.USER_COUNT)]
         self.movies = [uuid.uuid4() for i in range(1, ucg_config.MOVIE_COUNT)]
         self.user_movie = [self.movies[randrange(ucg_config.MOVIE_COUNT - 1)]
@@ -46,7 +47,7 @@ class UCGViewEvent(UGCProvider):
                     f"VALUES ('{data.movie_id}', '{data.user_id}', '{data.event_time}', {data.view_run_time})"
 
         if sql_dialect == 'postgres':
-            query = 'INSERT INTO content.movies_statistics (movie_id, user_id, event_time, view_run_time) ' \
+            query = 'INSERT INTO content.MovieViewEvent (movie_id, user_id, event_time, view_run_time) ' \
                     'VALUES (%s, %s, %s, %s) '
 
         if sql_dialect == 'mongo':
@@ -64,7 +65,7 @@ class UCGViewEvent(UGCProvider):
                     f"VALUES {batch}"
 
         if sql_dialect == 'postgres':
-            query = 'INSERT INTO content.movies_statistics (movie_id, user_id, event_time, view_run_time) ' \
+            query = 'INSERT INTO content.MovieViewEvent (movie_id, user_id, event_time, view_run_time) ' \
                     'VALUES (%s, %s, %s, %s) '
 
         if sql_dialect == 'mongo':
@@ -80,7 +81,7 @@ class UCGViewEvent(UGCProvider):
                     f"WHERE movie_id = '{data.movie_id}'"
 
         if sql_dialect == 'postgres':
-            query = f"SELECT * FROM content.movies_statistics " \
+            query = f"SELECT * FROM content.MovieViewEvent " \
                     f"WHERE movie_id = '{data.movie_id}'"
 
         if sql_dialect == 'mongo':

@@ -27,8 +27,7 @@ class ViewUI:
                                            options=[10, 30, 100, 300, 1000, 3000, 10000, 30000, 100000, 300000,
                                                     1000000])
 
-            storage = st.multiselect('Insert Storages', key='select1',
-                                     options=storage_labels)
+            storages = st.multiselect('Storages', key='select1', options=storage_labels)
 
             submitted = st.form_submit_button('Run Benchmark')
 
@@ -36,5 +35,6 @@ class ViewUI:
                 if callable(onclick):
                     ucg_config.BATCHES = int(tries)
                     ucg_config.OBJECTS_MAX_LIM = int(ugc_objects)
+                    ucg_config.storages = storages
 
                     onclick()

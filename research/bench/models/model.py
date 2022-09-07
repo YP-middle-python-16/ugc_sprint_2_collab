@@ -3,6 +3,7 @@ from datetime import datetime
 from random import randrange, choice
 
 from pydantic import BaseModel
+import lorem
 
 from models.utils import write_comment, random_date
 
@@ -29,15 +30,14 @@ class Comment(BaseModel):
 
     @staticmethod
     def random():
-        user_id = str(uuid.uuid4())
-        movie_id = str(uuid.uuid4())
-
         d1 = datetime.strptime('1/1/2019 1:30 PM', '%m/%d/%Y %I:%M %p')
         d2 = datetime.strptime('1/1/2022 4:50 AM', '%m/%d/%Y %I:%M %p')
 
+        user_id = str(uuid.uuid4())
+        movie_id = str(uuid.uuid4())
         event_time = random_date(d1, d2)
         title = write_comment("{so|totally|i like|totaly bad|very good}")
-        body = write_comment("{{so|totally} ugly|very {nice|bad}} {photo|media|upload} {:)||:D|<3}")
+        body = lorem.text()
         score = choice([-1, 0, 1])
         return Comment(user_id=user_id,
                        movie_id=movie_id,
@@ -81,7 +81,7 @@ class LikeEvent(BaseModel):
     @staticmethod
     def random():
         movie_id = str(uuid.uuid4())
-        user_id =str(uuid.uuid4())
+        user_id = str(uuid.uuid4())
         return LikeEvent(movie_id=movie_id, user_id=user_id)
 
 

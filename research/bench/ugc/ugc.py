@@ -12,6 +12,10 @@ class UGCSettings:
 
     OBJECTS_MAX_LIM = 1000
 
+    storages = []
+
+
+
 
 ucg_config = UGCSettings()
 

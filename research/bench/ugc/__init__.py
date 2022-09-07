@@ -5,8 +5,8 @@ from ugc.ugc_provider_bookmark import UGCBookmark
 
 
 UCG_PROVIDERS = {
-    'view': UCGViewEvent
-    # 'like': UGCLike,
-    # 'comment': UGCComment,
+    'view': UCGViewEvent,
+    'like': UGCLike,
+    'comment': UGCComment
     # 'bookmark': UGCBookmark
 }

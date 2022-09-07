@@ -147,3 +147,4 @@ kafka_data
 mongodata
 
 tests/functional/results
+/research/docker/postrges/postgres/data/
