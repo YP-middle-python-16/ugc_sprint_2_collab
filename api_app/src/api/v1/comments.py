@@ -1,8 +1,12 @@
+import json
+from http import HTTPStatus
+
+from fastapi import APIRouter, Depends, HTTPException
+
 from api.v1.view_models import StatusMessage
-from fastapi import APIRouter, Depends
 from models.models import Comment
-from services.event_service import EventService
-from services.service_locator import get_event_service
+from services.doc_service import DocService
+from services.service_locator import get_storage_service
 from core.config import settings
 from api.v1.pagination_shema import PaginationSchema
 
@@ -15,13 +19,21 @@ router = APIRouter()
     summary="list user comments",
     description="list user comments"
 )
-async def list_comment_by_film(film_id: str,
+async def list_comment_by_film(movie_id: str,
                                pagination: PaginationSchema = Depends(),
-                               event_service: EventService = Depends(get_event_service)) -> list[Comment]:
-    # await event_service.send_message(settings.KAFKA_FILM_LIKE_TOPIC, event_message)
+                               storage_service: DocService = Depends(get_storage_service)) -> list[Comment]:
 
-    tmp = [Comment().random() for i in range(1, 10)]
-    return tmp
+    queue = {'movie_id': movie_id}
+    queue_json = json.dumps(queue, indent=4)
+    comments = await storage_service.select(queue_json, settings.MONGO_TABLE_LIKE)
+
+    if len(comments) == 0:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='comment not found')
+
+    start = (pagination.page_number - 1) * pagination.page_size
+    end = start + pagination.page_size
+
+    return comments[start:end]
 
 
 @router.get(
@@ -32,11 +44,19 @@ async def list_comment_by_film(film_id: str,
 )
 async def list_comment_by_user(user_id: str,
                                pagination: PaginationSchema = Depends(),
-                               event_service: EventService = Depends(get_event_service)) -> list[Comment]:
-    # await event_service.send_message(settings.KAFKA_FILM_LIKE_TOPIC, event_message)
+                               storage_service: DocService = Depends(get_storage_service)) -> list[Comment]:
 
-    tmp = [Comment().random() for i in range(1, 10)]
-    return tmp
+    queue = {'user_id': user_id}
+    queue_json = json.dumps(queue, indent=4)
+    comments = await storage_service.select(queue_json, settings.MONGO_TABLE_LIKE)
+
+    if len(comments) == 0:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='comment not found')
+
+    start = (pagination.page_number - 1) * pagination.page_size
+    end = start + pagination.page_size
+
+    return comments[start:end]
 
 
 @router.post(
@@ -45,8 +65,10 @@ async def list_comment_by_user(user_id: str,
     summary="Post comment",
     description="Post comment"
 )
-async def message(comment: Comment,
-                  event_service: EventService = Depends(get_event_service)) -> StatusMessage:
-    # await event_service.send_message(settings.KAFKA_FILM_COMMENT_TOPIC, event_message)
+async def post_comment(comment: Comment,
+                       storage_service: DocService = Depends(get_storage_service)) -> StatusMessage:
+
+    comment = dict(comment)
+    await storage_service.insert(comment, settings.MONGO_TABLE_COMMENT)
 
     return StatusMessage(head="ok", body="all ok")

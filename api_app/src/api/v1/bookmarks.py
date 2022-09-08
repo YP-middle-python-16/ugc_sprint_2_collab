@@ -1,8 +1,12 @@
+import json
+from http import HTTPStatus
+
+from fastapi import APIRouter, Depends, HTTPException
+
 from api.v1.view_models import StatusMessage
-from fastapi import APIRouter, Depends
-from models.models import EventMessage, Bookmark
-from services.event_service import EventService
-from services.service_locator import get_event_service
+from models.models import Bookmark
+from services.doc_service import DocService
+from services.service_locator import get_storage_service
 from core.config import settings
 from api.v1.pagination_shema import PaginationSchema
 
@@ -17,11 +21,19 @@ router = APIRouter()
 )
 async def bookmark_list(user_id: str,
                         pagination: PaginationSchema = Depends(),
-                        event_service: EventService = Depends(get_event_service)
+                        storage_service: DocService = Depends(get_storage_service)
                         ) -> list[Bookmark]:
+    queue = {'user_id': user_id}
+    queue_json = json.dumps(queue, indent=4)
+    bookmarks = await storage_service.select(queue_json, settings.MONGO_TABLE_LIKE)
 
-    tmp = [Bookmark().random() for i in range(1, 10)]
-    return tmp
+    if len(bookmarks) ==0:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='film not found')
+
+    start = (pagination.page_number - 1) * pagination.page_size
+    end = start + pagination.page_size
+
+    return bookmarks[start:end]
 
 
 @router.post(
@@ -31,9 +43,9 @@ async def bookmark_list(user_id: str,
     description="Post new bookmark info"
 )
 async def insert_bookmark(bookmark: Bookmark,
-                          event_service: EventService = Depends(get_event_service)) -> StatusMessage:
-    # await event_service.send_message(settings.KAFKA_FILM_LIKE_TOPIC, event_message)
+                          storage_service: DocService = Depends(get_storage_service)) -> StatusMessage:
+
+    bookmark = dict(bookmark)
+    await storage_service.insert(bookmark, settings.MONGO_TABLE_BOOKMARK)
 
     return StatusMessage(head="ok", body="all ok")
-
-

@@ -1,4 +1,5 @@
 import aiokafka
+from pymongo import MongoClient
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
@@ -7,6 +8,7 @@ from fastapi.logger import logger
 from api.v1 import events, likes, comments, bookmarks
 from core.config import settings
 from db import kafka
+from db import mongo
 from utils import backoff
 
 app = FastAPI(
@@ -24,13 +26,15 @@ async def startup():
     await kafka.kafka_producer.start()
     logger.info('kafka is ok')
 
+    mongo.mongo_client = MongoClient(settings.MONGO_CONNECTION)
+
 
 @app.on_event('shutdown')
 async def shutdown():
     await kafka.kafka_producer.stop()
 
 
-# Подключаем роутер к серверу, указав префикс /v1/events
+# Подключаем роутер к серверу, указав префикс /v1/***
 # Теги указываем для удобства навигации по документации
 app.include_router(events.router, prefix='/api/v1/event', tags=['Event'])
 app.include_router(comments.router, prefix='/api/v1/comments', tags=['Comment'])

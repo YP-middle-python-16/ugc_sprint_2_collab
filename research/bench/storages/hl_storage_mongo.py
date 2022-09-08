@@ -3,14 +3,10 @@ from pymongo import MongoClient
 import pymongo
 
 
-
-
 class MongoDBStorage(HiLoadStorage):
     def __init__(self, connect_param=None):
         self.sql_dialect = 'mongo'
         self.label = 'Mongo'
-
-        CONNECTION_STRING = "mongodb://root:example@localhost/"
 
         self.client = MongoClient(connect_param)
         self.db = self.client['SeriesDB']

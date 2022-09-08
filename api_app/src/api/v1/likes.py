@@ -1,13 +1,14 @@
 from typing import Union
+import json
 
+from datetime import datetime
 
 from api.v1.view_models import StatusMessage
 from fastapi import APIRouter, Depends, Query
-from models.models import Like
-from services.event_service import EventService
-from services.service_locator import get_event_service
+from models.models import Like, LikeEvent
+from services.doc_service import DocService
+from services.service_locator import get_storage_service
 from core.config import settings
-import uuid
 
 router = APIRouter()
 
@@ -19,9 +20,15 @@ router = APIRouter()
     description="Post like event message info"
 )
 async def like_insert(user_id: str, movie_id, like: int,
-                  event_service: EventService = Depends(get_event_service)) -> StatusMessage:
-    await event_service.send_message(settings.KAFKA_FILM_LIKE_TOPIC, event_message)
+                      storage_service: DocService = Depends(get_storage_service)) -> StatusMessage:
 
+    new_like = LikeEvent(user_id=user_id,
+                         movie_id=movie_id,
+                         event_time=datetime.now(),
+                         score=like)
+
+    new_like = dict(new_like)
+    await storage_service.insert(new_like, settings.MONGO_TABLE_LIKE)
     return StatusMessage(head="ok", body="all ok")
 
 
@@ -32,10 +39,32 @@ async def like_insert(user_id: str, movie_id, like: int,
     description="Post comment event message info"
 )
 async def like_list(user_id: str,
-                    film_id: Union[list[str], None] = Query(default=None),
-                    event_service: EventService = Depends(get_event_service)) -> list[Like]:
+                    movie_ids: Union[list[str], None] = Query(default=None),
+                    storage_service: DocService = Depends(get_storage_service)) -> list[Like]:
 
-    # await event_service.send_message(settings.KAFKA_FILM_COMMENT_TOPIC, )
-    film_items = {"q": film_id}
-    tmp = [Like().random() for i in range(1, 10)]
-    return tmp
+    likes = []
+
+    for movie_id in movie_ids:
+        film_queue = {'movie_id': movie_id}
+        film_queue_json = json.dumps(film_queue, indent=4)
+        like_count = await storage_service.count(film_queue_json, settings.MONGO_TABLE_LIKE)
+
+        user_queue = {
+            'movie_id': movie_id,
+            'user_id': user_id
+        }
+        user_queue_json = json.dumps(user_queue, indent=4)
+        user_like_count = await storage_service.count(user_queue_json, settings.MONGO_TABLE_LIKE)
+        user_liked = False
+        if user_like_count > 0:
+            user_liked = True
+
+        like = Like(
+            movie_id=movie_id,
+            count=like_count,
+            user_liked=user_liked
+        )
+
+        likes.append(like)
+
+    return likes
