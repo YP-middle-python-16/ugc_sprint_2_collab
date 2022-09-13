@@ -22,7 +22,6 @@ router = APIRouter()
 async def list_comment_by_film(movie_id: str,
                                pagination: PaginationSchema = Depends(),
                                storage_service: DocService = Depends(get_storage_service)) -> list[Comment]:
-
     queue = {'movie_id': movie_id}
     queue_json = json.dumps(queue, indent=4)
     comments = await storage_service.select(queue_json, settings.MONGO_TABLE_LIKE)
@@ -45,7 +44,6 @@ async def list_comment_by_film(movie_id: str,
 async def list_comment_by_user(user_id: str,
                                pagination: PaginationSchema = Depends(),
                                storage_service: DocService = Depends(get_storage_service)) -> list[Comment]:
-
     queue = {'user_id': user_id}
     queue_json = json.dumps(queue, indent=4)
     comments = await storage_service.select(queue_json, settings.MONGO_TABLE_LIKE)
@@ -67,7 +65,6 @@ async def list_comment_by_user(user_id: str,
 )
 async def post_comment(comment: Comment,
                        storage_service: DocService = Depends(get_storage_service)) -> StatusMessage:
-
     comment = dict(comment)
     await storage_service.insert(comment, settings.MONGO_TABLE_COMMENT)
 
