@@ -46,15 +46,15 @@ async def like_list(user_id: str,
 
     for movie_id in movie_ids:
         film_queue = {'movie_id': movie_id}
-        film_queue_json = json.dumps(film_queue, indent=4)
-        like_count = await storage_service.count(film_queue_json, settings.MONGO_TABLE_LIKE)
+
+        like_count = await storage_service.count(film_queue, settings.MONGO_TABLE_LIKE)
 
         user_queue = {
             'movie_id': movie_id,
             'user_id': user_id
         }
-        user_queue_json = json.dumps(user_queue, indent=4)
-        user_like_count = await storage_service.count(user_queue_json, settings.MONGO_TABLE_LIKE)
+
+        user_like_count = await storage_service.count(user_queue, settings.MONGO_TABLE_LIKE)
         user_liked = False
         if user_like_count > 0:
             user_liked = True

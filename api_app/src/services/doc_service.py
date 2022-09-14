@@ -10,21 +10,21 @@ class DocService:
         self.db = self.mongo_client[settings.MONGO_DB]
 
     async def insert(self, data, table: str):
-        data_dict = [dict(row) for row in data]
+        data_dict = dict(data)
 
         collection = self.db[table]
-        collection.insert_one(data_dict)
+        doc_id = collection.insert_one(data_dict).inserted_id
 
-    async def select(self, query: str, table: str):
-        query_dict = dict(query)
+        return doc_id
+
+    async def select(self, query, table: str):
         collection = self.db[table]
+        return [doc for doc in collection.find(query)]
 
-        results = collection.find(query_dict)
-        return results
-
-    async def count(self, query: str, table: str):
-        query_dict = dict(query)
+    async def view_all(self, table: str):
         collection = self.db[table]
+        return [doc for doc in collection.find()]
 
-        results = collection.count_documents(query_dict)
-        return results
+    async def count(self, query , table: str):
+        collection = self.db[table]
+        return collection.count_documents(query)

@@ -24,8 +24,7 @@ async def bookmark_list(user_id: str,
                         storage_service: DocService = Depends(get_storage_service)
                         ) -> list[Bookmark]:
     queue = {'user_id': user_id}
-    queue_json = json.dumps(queue, indent=4)
-    bookmarks = await storage_service.select(queue_json, settings.MONGO_TABLE_LIKE)
+    bookmarks = await storage_service.select(queue, settings.MONGO_TABLE_BOOKMARK)
 
     if len(bookmarks) ==0:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='film not found')

@@ -14,7 +14,7 @@ router = APIRouter()
 
 
 @router.get(
-    '/film/{film_id}/',
+    '/film/{movie_id}/',
     response_model=list[Comment],
     summary="list user comments",
     description="list user comments"
@@ -22,10 +22,8 @@ router = APIRouter()
 async def list_comment_by_film(movie_id: str,
                                pagination: PaginationSchema = Depends(),
                                storage_service: DocService = Depends(get_storage_service)) -> list[Comment]:
-
     queue = {'movie_id': movie_id}
-    queue_json = json.dumps(queue, indent=4)
-    comments = await storage_service.select(queue_json, settings.MONGO_TABLE_LIKE)
+    comments = await storage_service.select(queue, settings.MONGO_TABLE_COMMENT)
 
     if len(comments) == 0:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='comment not found')
@@ -45,10 +43,8 @@ async def list_comment_by_film(movie_id: str,
 async def list_comment_by_user(user_id: str,
                                pagination: PaginationSchema = Depends(),
                                storage_service: DocService = Depends(get_storage_service)) -> list[Comment]:
-
     queue = {'user_id': user_id}
-    queue_json = json.dumps(queue, indent=4)
-    comments = await storage_service.select(queue_json, settings.MONGO_TABLE_LIKE)
+    comments = await storage_service.select(queue, settings.MONGO_TABLE_COMMENT)
 
     if len(comments) == 0:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='comment not found')
@@ -68,7 +64,7 @@ async def list_comment_by_user(user_id: str,
 async def post_comment(comment: Comment,
                        storage_service: DocService = Depends(get_storage_service)) -> StatusMessage:
 
-    comment = dict(comment)
-    await storage_service.insert(comment, settings.MONGO_TABLE_COMMENT)
+    comment_dict = dict(comment)
+    await storage_service.insert(comment_dict, settings.MONGO_TABLE_COMMENT)
 
-    return StatusMessage(head="ok", body="all ok")
+    return StatusMessage(head="ok", body=str('Comment added'))
