@@ -1,9 +1,10 @@
-from api.v1.view_models import StatusMessage
 from fastapi import APIRouter, Depends
+
+from api.v1.view_models import StatusMessage
+from core.config import settings
 from models.models import EventMessage
 from services.event_service import EventService
 from services.service_locator import get_event_service
-from core.config import settings
 
 router = APIRouter()
 

@@ -1,6 +1,6 @@
 from aiokafka.producer import AIOKafkaProducer
+
 from models.models import EventMessage
-from core.config import settings
 
 
 class EventService:

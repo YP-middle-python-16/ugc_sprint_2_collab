@@ -1,6 +1,5 @@
 from pymongo import MongoClient
-from models.models import EventMessage
-from core.config import settings
+
 from core.config import settings
 
 

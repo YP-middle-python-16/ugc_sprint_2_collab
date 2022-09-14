@@ -1,12 +1,13 @@
 from functools import lru_cache
 
-from db.async_message_queue import AsyncMessageQueue
-from db.kafka import get_kafka_producer
-from db.async_storage import AsyncStorage
-from db.mongo import get_mongo_client
 from fastapi import Depends
-from services.event_service import EventService
+
+from db.async_message_queue import AsyncMessageQueue
+from db.async_storage import AsyncStorage
+from db.kafka import get_kafka_producer
+from db.mongo import get_mongo_client
 from services.doc_service import DocService
+from services.event_service import EventService
 
 
 @lru_cache()

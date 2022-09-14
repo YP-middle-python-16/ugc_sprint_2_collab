@@ -1,9 +1,9 @@
 import aiokafka
-from pymongo import MongoClient
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import ORJSONResponse
 from fastapi.logger import logger
+from fastapi.responses import ORJSONResponse
+from pymongo import MongoClient
 
 from api.v1 import events, likes, comments, bookmarks
 from core.config import settings
