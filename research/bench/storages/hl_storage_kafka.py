@@ -1,4 +1,4 @@
-from core import config
+from core.config import settings
 from kafka import KafkaProducer
 from storages.hl_storage import HiLoadStorage
 
@@ -12,7 +12,7 @@ class KafkaStorage(HiLoadStorage):
     def insert(self, data=None, query: str = None):
         value = data.json()
         self.producer.send(
-            topic=config.KAFKA_TOPIC,
+            topic=settings.KAFKA_TOPIC,
             value=bytes(value, encoding="utf-8"),
             key=bytes(f'{data.user_id}_{data.movie_id}', encoding="utf-8")
         )

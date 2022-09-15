@@ -1,12 +1,16 @@
-import os
+from pydantic import BaseSettings, Field
 
 
-MESSAGES_BATCH_SIZE = 10000
-BATCHES = 10
+class Settings(BaseSettings):
+    MESSAGES_BATCH_SIZE: int = Field(env="MESSAGES_BATCH_SIZE", default=10000)
+    BATCHES: int = Field(env="BATCHES", default=10)
 
-API_TOPIC = "events_topic"
+    API_TOPIC: str = Field(env="API_TOPIC", default="events_topic")
 
-API_HOST = os.environ.get("API_HOST", "0.0.0.0")
-API_PORT = os.environ.get("API_PORT", "8000")
+    API_HOST: str = Field(env="API_HOST", default="0.0.0.0")
+    API_PORT: int = Field(env="API_PORT", default=8000)
 
-SLEEP_PAUSE = 0.5
+    SLEEP_PAUSE: float = Field(env="SLEEP_PAUSE", default=0.5)
+
+
+settings = Settings()

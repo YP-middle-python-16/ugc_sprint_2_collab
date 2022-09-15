@@ -3,7 +3,7 @@ from random import randrange
 
 import aiohttp
 
-import config
+from config import settings
 import fake_data
 from models import EventMessage
 from spectator import Spectator
@@ -38,30 +38,30 @@ async def one_iteration(session):
         key = fake_user.key
         # send movie event
         message = EventMessage(key=key, value=film_view_event.json())
-        await session.post(f'http://{config.API_HOST}:{config.API_PORT}/api/v1/event/', json=message.dict())
+        await session.post(f'http://{settings.API_HOST}:{settings.API_PORT}/api/v1/event/', json=message.dict())
 
         # send rating event
         if likes_event:
             message = EventMessage(key=key, value=likes_event.json())
-            await session.post(f'http://{config.API_HOST}:{config.API_PORT}/api/v1/likes/', json=message.dict())
+            await session.post(f'http://{settings.API_HOST}:{settings.API_PORT}/api/v1/likes/', json=message.dict())
 
         # send comment event
         if comment_event:
             message = EventMessage(key=key, value=comment_event.json())
-            await session.post(f'http://{config.API_HOST}:{config.API_PORT}/api/v1/comments/', json=message.dict())
+            await session.post(f'http://{settings.API_HOST}:{settings.API_PORT}/api/v1/comments/', json=message.dict())
 
         # send bookmark event
         if bookmark_event:
             message = EventMessage(key=key, value=bookmark_event.json())
-            await session.post(f'http://{config.API_HOST}:{config.API_PORT}/api/v1/bookmarks/', json=message.dict())
+            await session.post(f'http://{settings.API_HOST}:{settings.API_PORT}/api/v1/bookmarks/', json=message.dict())
 
 
 async def main():
     async with aiohttp.ClientSession() as session:
         while True:
-            coros = [one_iteration(session) for _ in range(config.MESSAGES_BATCH_SIZE)]
+            coros = [one_iteration(session) for _ in range(settings.MESSAGES_BATCH_SIZE)]
             await asyncio.gather(*coros)
-            await asyncio.sleep(config.SLEEP_PAUSE)
+            await asyncio.sleep(settings.SLEEP_PAUSE)
 
 
 spectators = generate_spectators()

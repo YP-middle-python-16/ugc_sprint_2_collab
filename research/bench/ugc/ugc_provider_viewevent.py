@@ -39,7 +39,6 @@ class UCGViewEvent(UGCProvider):
                     if counter > limit:
                         return True
 
-
     def get_insert_query(self, data, sql_dialect):
         query = ''
         if sql_dialect == 'clickhouse':

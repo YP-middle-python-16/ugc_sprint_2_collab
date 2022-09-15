@@ -15,8 +15,4 @@ class UGCSettings:
     storages = []
 
 
-
-
 ucg_config = UGCSettings()
-
-

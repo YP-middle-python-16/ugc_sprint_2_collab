@@ -2,7 +2,7 @@ import psycopg2
 from psycopg2.extras import execute_batch
 from psycopg2.extras import DictCursor
 
-from core import config
+from core.config import settings
 from storages.hl_storage import HiLoadStorage
 
 
@@ -11,7 +11,7 @@ class PostgresStorage(HiLoadStorage):
         self.sql_dialect = 'postgres'
         self.label = 'Postgres'
 
-        self.pg_conn = psycopg2.connect(**config.PG_DLS, cursor_factory=DictCursor)
+        self.pg_conn = psycopg2.connect(**settings.PG_DLS, cursor_factory=DictCursor)
         self.cur = self.pg_conn.cursor()
 
     def insert(self, data=None, query: str = None):

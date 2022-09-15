@@ -56,12 +56,19 @@ async def shutdown():
     await kafka.kafka_producer.stop()
 
 
-@app.middleware("http")
-async def before_request(request: Request, call_next):
+@app.middleware('http')
+async def logging(request: Request, call_next):
+    # check header
     request_id = request.headers.get("X-Request-Id")
     if settings.CHECK_HEADERS and not request_id:
         raise RuntimeError("request id is required")
-    return await call_next(request)
+    response = await call_next(request)
+    # add tag for logs
+    custom_logger = logging.LoggerAdapter(
+        logger, extra={'tag': 'ugc_api', 'request_id': request_id}
+    )
+    custom_logger.info(request)
+    return response
 
 
 # Подключаем роутер к серверу, указав префикс /v1/****

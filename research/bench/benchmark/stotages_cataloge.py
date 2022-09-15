@@ -1,4 +1,4 @@
-from core import config
+from core.config import settings
 from storages.hl_storage_kafka import KafkaStorage
 from storages.hl_storage_clickhouse import ClickhouseStorage
 from storages.hl_storage_null import DevNullStorage
@@ -8,7 +8,7 @@ from storages.hl_storage_mongo import MongoDBStorage
 STORAGES_CATALOG = {
     'Kafka': {
         'storage': 'Kafka',
-        'client':  DevNullStorage(), # KafkaStorage(connect_param=config.KAFKA_CONNECT),
+        'client': DevNullStorage(),  # KafkaStorage(connect_param=settings.KAFKA_CONNECT),
         'use': False,
         'use_insert': True,
         'use_select': False,
@@ -16,7 +16,7 @@ STORAGES_CATALOG = {
     },
     'Clickhouse single': {
         'storage': 'ClickHouse',
-        'client': ClickhouseStorage(connect_param=config.CLICKHOUSE_CONNECT),
+        'client': ClickhouseStorage(connect_param=settings.CLICKHOUSE_CONNECT),
         'use': False,
         'use_insert': False,
         'use_select': False,
@@ -24,7 +24,7 @@ STORAGES_CATALOG = {
     },
     'Clickhouse batch': {
         'storage': 'ClickHouse',
-        'client': ClickhouseStorage(connect_param=config.CLICKHOUSE_CONNECT),
+        'client': ClickhouseStorage(connect_param=settings.CLICKHOUSE_CONNECT),
         'use': True,
         'use_insert': True,
         'use_select': True,
@@ -32,7 +32,7 @@ STORAGES_CATALOG = {
     },
     'Mongo_batch': {
         'storage': 'MondoDB',
-        'client': MongoDBStorage(connect_param=config.MONGODB_CONNECT),
+        'client': MongoDBStorage(connect_param=settings.MONGODB_CONNECT),
         'use': True,
         'use_insert': True,
         'use_select': True,
@@ -40,7 +40,7 @@ STORAGES_CATALOG = {
     },
     'Postgres batch': {
         'storage': 'Postgres',
-        'client': PostgresStorage(connect_param=config.PG_DLS),
+        'client': PostgresStorage(connect_param=settings.PG_DLS),
         'use': True,
         'use_insert': True,
         'use_select': True,

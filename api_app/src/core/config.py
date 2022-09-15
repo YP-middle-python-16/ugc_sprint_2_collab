@@ -25,16 +25,16 @@ class Settings(BaseSettings):
     )
 
     LOGSTASH_HOST: str = Field(env="LOGSTASH_HOST", default="logstash")
-    LOGSTASH_PORT: str = Field(env="LOGSTASH_PORT", default=5044)
+    LOGSTASH_PORT: int = Field(env="LOGSTASH_PORT", default=5044)
 
     # mongo settings
-    MONGO_CONNECTION = "mongodb://root:example@localhost:27017/"
-    MONGO_DB = 'UGC'
+    MONGO_CONNECTION: str = Field(env="MONGO_CONNECTION", default="mongodb://root:example@localhost:27017/")
+    MONGO_DB: str = Field(env="MONGO_DB", default='UGC')
 
-    MONGO_TABLE_VIEW = 'views'
-    MONGO_TABLE_LIKE = 'likes'
-    MONGO_TABLE_COMMENT = 'comments'
-    MONGO_TABLE_BOOKMARK = 'bookmark'
+    MONGO_TABLE_VIEW: str = Field(env="MONGO_TABLE_VIEW", default='views')
+    MONGO_TABLE_LIKE: str = Field(env="MONGO_TABLE_LIKE", default='likes')
+    MONGO_TABLE_COMMENT: str = Field(env="MONGO_TABLE_COMMENT", default='comments')
+    MONGO_TABLE_BOOKMARK: str = Field(env="MONGO_TABLE_COMMENT", default='bookmark')
 
 
 settings = Settings()
