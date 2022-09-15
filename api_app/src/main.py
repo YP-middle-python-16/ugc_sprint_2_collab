@@ -1,10 +1,11 @@
+import logging
+import uuid
+
 import aiokafka
 import logstash
 import sentry_sdk
 import uvicorn
-from fastapi import FastAPI
 from fastapi.logger import logger
-from fastapi.responses import ORJSONResponse
 from pymongo import MongoClient
 from asgi_correlation_id import CorrelationIdMiddleware
 from asgi_correlation_id.middleware import is_valid_uuid4

@@ -20,7 +20,6 @@ router = APIRouter()
 )
 async def like_insert(user_id: str, movie_id, like: int,
                       storage_service: DocService = Depends(get_storage_service)) -> StatusMessage:
-
     new_like = LikeEvent(user_id=user_id,
                          movie_id=movie_id,
                          event_time=datetime.now(),
@@ -40,7 +39,6 @@ async def like_insert(user_id: str, movie_id, like: int,
 async def like_list(user_id: str,
                     movie_ids: Union[list[str], None] = Query(default=None),
                     storage_service: DocService = Depends(get_storage_service)) -> list[Like]:
-
     likes = []
 
     for movie_id in movie_ids:

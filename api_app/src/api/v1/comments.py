@@ -62,7 +62,6 @@ async def list_comment_by_user(user_id: str,
 )
 async def post_comment(comment: Comment,
                        storage_service: DocService = Depends(get_storage_service)) -> StatusMessage:
-
     comment_dict = dict(comment)
     await storage_service.insert(comment_dict, settings.MONGO_TABLE_COMMENT)
 
