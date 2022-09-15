@@ -8,7 +8,7 @@ from kafka import (
 )
 from kafka.consumer.fetcher import ConsumerRecord
 
-from config import settings
+from core.config import settings
 from models import Message, FilmViewEvent
 from services import logger
 
