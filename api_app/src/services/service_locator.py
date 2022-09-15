@@ -16,7 +16,8 @@ def get_event_service(
 ) -> EventService:
     return EventService(kafka_producer=kafka_producer)
 
+
 def get_storage_service(
         mongo_client: AsyncStorage = Depends(get_mongo_client)
 ) -> DocService:
-    return DocService(mongo_client = mongo_client)
+    return DocService(mongo_client=mongo_client)

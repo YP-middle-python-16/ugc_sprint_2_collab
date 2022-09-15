@@ -36,4 +36,5 @@ class Settings(BaseSettings):
     MONGO_TABLE_COMMENT = 'comments'
     MONGO_TABLE_BOOKMARK = 'bookmark'
 
+
 settings = Settings()

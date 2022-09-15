@@ -25,7 +25,7 @@ async def bookmark_list(user_id: str,
     queue = {'user_id': user_id}
     bookmarks = await storage_service.select(queue, settings.MONGO_TABLE_BOOKMARK)
 
-    if len(bookmarks) ==0:
+    if len(bookmarks) == 0:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='film not found')
 
     start = (pagination.page_number - 1) * pagination.page_size
@@ -42,7 +42,6 @@ async def bookmark_list(user_id: str,
 )
 async def insert_bookmark(bookmark: Bookmark,
                           storage_service: DocService = Depends(get_storage_service)) -> StatusMessage:
-
     bookmark = dict(bookmark)
     await storage_service.insert(bookmark, settings.MONGO_TABLE_BOOKMARK)
 
