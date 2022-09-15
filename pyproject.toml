@@ -1,0 +1,13 @@
+[tool.black]
+line-length = 127
+include = '\.pyi?$'
+exclude = '''
+(
+    ^/env
+    | \.mypy_cache
+    | \.git
+    | \.mypy_cache
+)
+'''
+[tool.isort]
+skip = [".gitignore", ".dockerignore", "env", ".mypy_cache","reports"]
