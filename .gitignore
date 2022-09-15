@@ -149,3 +149,4 @@ mongodata
 tmp
 
 tests/functional/results
+/research/docker/postrges/postgres/data/
