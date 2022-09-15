@@ -21,13 +21,12 @@ except:
 new_table_likes = 'CREATE TABLE movies_statistics.likes ON CLUSTER company_cluster (' \
                   'movie_id FixedString(36), ' \
                   'user_id FixedString(36)) ' \
-                    'Engine=MergeTree() ' \
+                  'Engine=MergeTree() ' \
                   'ORDER BY movie_id'
 try:
     client.execute(new_table_likes)
 except:
     pass
-
 
 new_table_comments = 'CREATE TABLE movies_statistics.comments ON CLUSTER company_cluster (' \
                      'movie_id FixedString(36), ' \
