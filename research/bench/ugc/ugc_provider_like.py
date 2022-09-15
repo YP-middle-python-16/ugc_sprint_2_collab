@@ -11,7 +11,7 @@ class UGCLike(UGCProvider):
     def generate(self, limit):
         counter = 0
         while counter <= limit:
-            counter = counter+1
+            counter = counter + 1
             yield LikeEvent.random()
 
     def get_insert_query(self, data, sql_dialect='postgres'):
@@ -58,7 +58,6 @@ class UGCLike(UGCProvider):
             query = f"SELECT * FROM content.likes " \
                     f"WHERE movie_id = '{data.movie_id}'"
 
-
         if sql_dialect == 'mongo':
             collection = 'likes'
             data_select = {'movie_id': data.movie_id}
@@ -67,4 +66,3 @@ class UGCLike(UGCProvider):
             query = (collection, json_object)
 
         return query
-
